@@ -1,0 +1,34 @@
+import java.util.List;
+import java.util.ArrayList;
+class Solution {
+    public int longestSemiRepetitiveSubstring(String s) {
+        List<Integer> indexList = new ArrayList<>();
+        int i;
+        for(i = 1;i < s.length();i++) {
+            if(s.charAt(i) == s.charAt(i-1)) {
+                indexList.add(i);
+            }
+        }
+        if(indexList.size() < 2){
+            return s.length();
+        }
+        int max = 0;
+        int next, prev, cur;
+        for(i = 0;i < indexList.size();i++) {
+            if(i+1 >= indexList.size()){
+                next = s.length();
+            } else {
+                next = indexList.get(i+1);
+            }
+            cur = next - indexList.get(i);
+            if(i-1 >= 0){
+                prev = indexList.get(i-1);
+            }else {
+                prev = 0;
+            }
+            cur += indexList.get(i) - prev;
+            max = Math.max(max, cur);
+        }
+        return max;
+    }
+}
