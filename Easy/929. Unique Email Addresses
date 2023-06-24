@@ -1,0 +1,21 @@
+import java.util.Set;
+import java.util.HashSet;
+class Solution {
+    public int numUniqueEmails(String[] emails) {
+        Set<String> uniqueEmails = new HashSet<>();
+        for(String i : emails){
+            String p1 = i.substring(0, i.indexOf("@"));
+            String p2 = i.substring(i.indexOf("@") + 1);
+            if (p1.contains("+")) {
+                p1 = p1.substring(0,p1.indexOf("+"));
+            }
+            while(p1.contains(".")) {
+                p1 = p1.substring(0, p1.indexOf(".")) + p1.substring(p1.indexOf(".") + 1);
+            }
+            p1 += "@";
+            p1 += p2;
+            uniqueEmails.add(p1);
+        }
+        return uniqueEmails.size();
+    }
+}
