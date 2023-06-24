@@ -1,0 +1,33 @@
+import java.util.Map;
+import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
+class Solution {
+    public String[] uncommonFromSentences(String s1, String s2) {
+       String[] arr1 = s1.split("[ ]");
+       Map<String, Integer> map1 = new HashMap<>();
+       List<String> list1 = new ArrayList<>();
+       for(String i : arr1) {
+           map1.put(i, map1.getOrDefault(i, 0) + 1);
+           if (map1.get(i) == 1) {
+               list1.add(i);
+           } else if (map1.get(i) == 2) {
+               list1.remove(list1.indexOf(i));
+           }
+       }
+       String[] arr2 = s2.split("[ ]");
+       for(String i : arr2) {
+           map1.put(i, map1.getOrDefault(i, 0) + 1);
+           if (map1.get(i) == 1) {
+               list1.add(i);
+           } else if (map1.get(i) == 2) {
+               list1.remove(list1.indexOf(i));
+           }
+       }
+       String[] ans = new String[list1.size()];
+       for(int i = 0;i < list1.size();i++) {
+           ans[i] = list1.get(i);
+       }
+       return ans;
+    }
+}
