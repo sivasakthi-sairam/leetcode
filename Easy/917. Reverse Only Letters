@@ -1,0 +1,29 @@
+import java.util.List;
+import java.util.ArrayList;
+class Solution {
+    public String reverseOnlyLetters(String s) {
+        List<Character> alphabets = new ArrayList<>();
+        List<Integer> indices = new ArrayList<>();
+        List<Character> others = new ArrayList<>();
+        int i;
+        char ch;
+        for(i = 0;i < s.length();i++) {
+            ch = s.charAt(i);
+            if ((ch > 64 && ch < 91) || (ch > 96 && ch < 123)) {
+                alphabets.add(ch);
+            } else {
+                others.add(ch);
+                indices.add(i);
+            }
+        }
+        Collections.reverse(alphabets);
+        for(i = 0;i < indices.size();i++) {
+            alphabets.add(indices.get(i), others.get(i));
+        }
+        String ans = "";
+        for(char j : alphabets) {
+            ans += j;
+        }
+        return ans;
+    }
+}
