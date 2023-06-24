@@ -1,0 +1,23 @@
+class Solution {
+    public int getMaximumGenerated(int n) {
+        if (n == 0) {
+            return 0;
+        }
+        int i;
+        int[] arr1 = new int[n+1];
+        arr1[0] = 0;
+        arr1[1] = 1;
+        int maxNumber = 1;
+        int limit = n/2;
+        if (n%2 == 0) {
+            limit--;
+        }
+        for(i = 1;i <= limit;i++) {
+            arr1[i*2] = arr1[i];
+            arr1[(2*i) + 1] = arr1[i] + arr1[i+1];
+            maxNumber = Math.max(maxNumber, arr1[i*2]);
+            maxNumber = Math.max(maxNumber, arr1[(2*i) + 1]);
+        }
+        return maxNumber;
+    }
+}
