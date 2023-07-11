@@ -1,0 +1,26 @@
+class Solution {
+    public int reverse(int x) {
+        if(x > 1000000000 || x < -1000000000) {
+            if(x%10 > 2){
+                return 0;
+            }
+        }
+        boolean isNegative = false;
+        if(x < 0){
+            isNegative = true;
+        }
+        int result = 0;
+        while(x != 0) {
+            result *= 10;
+            result += (x % 10);
+            x /= 10;
+        }
+        if(isNegative && result > 0){
+            return 0;
+        } else if(!isNegative && result < 0) {
+            return 0;
+        } else {
+            return result;
+        }
+    }
+}
