@@ -1,0 +1,30 @@
+class Solution {
+    public List<List<Integer>> threeSum(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+        if(nums == null || nums.length == 0) {
+            return result;
+        }
+        Arrays.sort(nums);
+        for(int i = 0;i < nums.length;i++) {
+            if(i == 0 || (nums[i] != nums[i-1])){
+                helper(i, result, nums);
+            }
+        }
+        return result;
+    }
+
+    public static void helper(int i, List<List<Integer>> result, int[] nums) {
+        int low = i+1;
+        int high = nums.length - 1;
+        while(low < high) {
+            int sum = nums[i] + nums[low] + nums[high];
+            if (sum < 0 || (low > i+1 && nums[low] == nums[low - 1])) {
+                low++;
+            } else if (sum > 0 || (high < nums.length - 1 && nums[high] == nums[high + 1])) {
+                high--;
+            } else {
+                result.add(Arrays.asList(nums[i], nums[low++], nums[high--]));
+            }
+        }
+    }
+}
