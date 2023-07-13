@@ -1,0 +1,43 @@
+class Solution {
+    public int romanToInt(String s) {
+        int result = 0;
+        char x;
+        for(int i = 0;i < s.length();i++) {
+            x = s.charAt(i);
+            if(x == 'M'){
+                result += 1000;
+                if(i > 0 && s.charAt(i-1) == 'C'){
+                    result -= 200;
+                }
+            } else if (x == 'D') {
+                result += 500;
+                if(i > 0 && s.charAt(i-1) == 'C'){
+                    result -= 200;
+                }
+            } else if (x == 'C') {
+                result += 100;
+                if(i > 0 && s.charAt(i-1) == 'X'){
+                    result -= 20;
+                }
+            } else if (x == 'L') {
+                result += 50;
+                if(i > 0 && s.charAt(i-1) == 'X'){
+                    result -= 20;
+                }
+            } else if (x == 'X') {
+                result += 10;
+                if(i > 0 && s.charAt(i-1) == 'I') {
+                    result -= 2;
+                }
+            } else if (x == 'V') {
+                result += 5;
+                if(i > 0 && s.charAt(i-1) == 'I'){
+                    result -= 2;
+                }
+            } else if (x == 'I') {
+                result += 1;
+            }
+        }
+        return result;
+    }
+}
