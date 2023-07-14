@@ -1,0 +1,31 @@
+class Solution {
+    public List<String> letterCombinations(String digits) {
+        List<String> result = new ArrayList<>();
+        Map<String, String[]> charMap = new HashMap<>();
+        charMap.put("2", new String[]{"a","b","c"});
+        charMap.put("3", new String[]{"d","e","f"});
+        charMap.put("4", new String[]{"g","h","i"});
+        charMap.put("5", new String[]{"j","k","l"});
+        charMap.put("6", new String[]{"m","n","o"});
+        charMap.put("7", new String[]{"p","q","r","s"});
+        charMap.put("8", new String[]{"t","u","v"});
+        charMap.put("9", new String[]{"w","x","y","z"});
+        helper(charMap, 0, result, digits, "");
+        return result;
+    }
+    public static void helper (Map<String, String[]> charMap, int depth, List<String> result, String digits, String answer) {
+        if (depth >= digits.length()) {
+            return;
+        }
+        String curChar = digits.substring(depth, depth+1);
+        String[] charArr = charMap.get(curChar);
+        for(int i = 0;i < charArr.length;i++) {
+            String val = answer + charArr[i];
+            if (depth == digits.length() - 1){
+                result.add(val);
+            } else {
+                helper(charMap, depth + 1, result, digits, val);
+            }
+        }
+    }
+}
