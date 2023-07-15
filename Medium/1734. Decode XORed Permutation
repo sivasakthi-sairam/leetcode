@@ -1,0 +1,32 @@
+class Solution {
+    public static int findRangeXor(int n) {
+        switch(n % 4) {
+            case 0:
+                return n;
+            case 1:
+                return 1;
+            case 2:
+                return n + 1;
+            case 3:
+                return 0;
+        }
+        return 0;
+    }
+
+    public int[] decode(int[] encoded) {
+        int n = encoded.length + 1;
+        int rangeXor = findRangeXor(n);
+        int encodedXor = 0;
+        for(int i = 0;i < encoded.length;i += 2) {
+            encodedXor ^= encoded[i];
+        }
+        int element = rangeXor ^ encodedXor;
+        int[] result = new int[n];
+        result[n-1] = element;
+        for(int i = n-2;i >= 0;i--) {
+            element ^= encoded[i];
+            result[i] = element;
+        }
+        return result;
+    }
+}
