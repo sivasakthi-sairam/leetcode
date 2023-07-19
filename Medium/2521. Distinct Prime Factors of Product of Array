@@ -1,0 +1,22 @@
+class Solution {
+    public int distinctPrimeFactors(int[] nums) {
+        Set<Integer> factorSet = new HashSet<>();
+        int j;
+        for(int i : nums) {
+            while(i % 2 == 0) {
+                factorSet.add(2);
+                i /= 2;
+            }
+            for (j = 3;j <= Math.sqrt(i);j += 2) {
+                while(i % j == 0) {
+                    factorSet.add(j);
+                    i /= j;
+                }
+            }
+            if (i > 2) {
+                factorSet.add(i);
+            }
+        }
+        return factorSet.size();
+    }
+}
