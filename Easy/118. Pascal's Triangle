@@ -1,0 +1,25 @@
+class Solution {
+    public static List<Integer> findNthRow(int n) {
+        List<Integer> curRowList = new ArrayList<>();
+        curRowList.add(1);
+        int prev = 1;
+        int cur;
+        for(int i = 1;i <= n;i++) {
+            cur = (prev * (n - i + 1)) / i;
+            curRowList.add(cur);
+            prev = cur;
+        }
+        return curRowList;
+    }
+
+    public List<List<Integer>> generate(int numRows) {
+        List<List<Integer>> bigList = new ArrayList<>();
+        List<Integer> l1 = Arrays.asList(1);
+        bigList.add(l1);
+        for(int i = 1;i < numRows;i++) {
+            List<Integer> curRowList = findNthRow(i);
+            bigList.add(curRowList);
+        }
+        return bigList;
+    }
+}
