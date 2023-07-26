@@ -1,0 +1,34 @@
+class Solution {
+    public static int findPartition(int[] nums, int l, int r) {
+        int pivot = nums[r];
+        int i = l - 1;
+        for (int j = l;j < r;j++) {
+            if (nums[j] < pivot) {
+                i++;
+                int temp = nums[i];
+                nums[i] = nums[j];
+                nums[j] = temp;
+            }
+        }
+        int temp = nums[i+1];
+        nums[i+1] = pivot;
+        nums[r] = temp;
+        return (i + 1);
+    }
+
+    public static int quickSelect(int[] nums, int l, int r, int p) {
+        int partition = findPartition(nums, l, r);
+        if (partition == p) {
+            return nums[partition];
+        } else if (partition < p) {
+            return quickSelect(nums, partition + 1, r, p);
+        } else {
+            return quickSelect(nums, l, partition - 1, p);
+        }
+    }
+
+    public int findKthLargest(int[] nums, int k) {
+        int position = quickSelect(nums, 0, nums.length - 1, nums.length - k);
+        return position;
+    }
+}
