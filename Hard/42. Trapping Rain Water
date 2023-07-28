@@ -1,0 +1,22 @@
+class Solution {
+    public int trap(int[] height) {
+        int n = height.length;
+        int[] oneWay = new int[n];
+        int[] twoWay = new int[n];
+        int oneMax = 0;
+        int twoMax = 0;
+        for (int i = 0;i < n;i++) {
+            oneMax = Math.max(oneMax, height[i]);
+            twoMax = Math.max(twoMax, height[n - i - 1]);
+            oneWay[i] = oneMax;
+            twoWay[n - i - 1] = twoMax;
+        }
+        int result = 0;
+        int curMax;
+        for (int i = 0;i < n;i++) {
+            curMax = Math.min(oneWay[i], twoWay[i]);
+            result += curMax - height[i];
+        }
+        return result;
+    }
+}
