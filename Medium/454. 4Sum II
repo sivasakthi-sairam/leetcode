@@ -1,0 +1,17 @@
+class Solution {
+    public int fourSumCount(int[] nums1, int[] nums2, int[] nums3, int[] nums4) {
+        Map<Integer, Integer> arr34Map = new HashMap<>();
+        for (int c : nums3) {
+            for (int d : nums4) {
+                arr34Map.put((c + d), arr34Map.getOrDefault((c + d), 0) + 1);
+            }
+        }
+        int count = 0;
+        for (int a : nums1) {
+            for (int b : nums2) {
+                count += arr34Map.getOrDefault(-(a + b), 0);
+            }
+        }
+        return count;
+    }
+}
