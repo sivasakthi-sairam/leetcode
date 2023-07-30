@@ -1,0 +1,29 @@
+class Solution {
+    public int shortestSubarray(int[] nums, int k) {
+        Deque<Pair<Integer, Long>> deque = new LinkedList<>();
+        Pair<Integer, Long> temp;
+        Pair<Integer, Long> curr;
+        long curSum = 0;
+        int minLen = Integer.MAX_VALUE;
+        for (int i = 0;i < nums.length;i++) {
+            curSum += nums[i];
+            if (curSum >= k) {
+                minLen = Math.min(minLen, i + 1);
+            }
+            temp = new Pair<>(Integer.MIN_VALUE, (long)Integer.MIN_VALUE);
+            while(deque.size() > 0 && (curSum - deque.peekFirst().getValue()) >= k) {
+                temp = deque.peekFirst();
+                deque.removeFirst();
+            }
+            if (temp.getKey() != Integer.MIN_VALUE) {
+                minLen = Math.min(minLen, i - temp.getKey());
+            }
+            while(deque.size() > 0 && deque.peekLast().getValue() >= curSum){
+                deque.removeLast();
+            }
+            curr = new Pair<>(i, curSum);
+            deque.add(curr);
+        }
+        return (minLen == Integer.MAX_VALUE) ? -1 : minLen;
+    }
+}
