@@ -1,0 +1,43 @@
+class Solution {
+    public static long[] findSubsetSum(int[] nums, int start, int end) {
+        int n = end - start + 1;
+        long[] result = new long[1 << n];
+        for (int i = 0;i < (1 << n);i++) {
+            long sum = 0;
+            for (int j = 0;j < n;j++) {
+                if ((i & (1 << j)) > 0) {
+                    sum += nums[j + start];
+                }
+            }
+            result[i] = sum;
+        }
+        return result;
+    }
+
+    public static int findLowerBound(long[] nums, long n) {
+        int index = Arrays.binarySearch(nums, n);
+        int lb;
+        if (index < 0) {
+            lb = Math.max(Math.abs(index) - 2, 0);
+        } else {
+            lb = index;
+        }
+        return lb;
+    }
+
+    public int minAbsDifference(int[] nums, int goal) {
+        int n = nums.length;
+        long[] firstHalfSum = findSubsetSum(nums, 0, (n/2) - 1);
+        long[] secondHalfSum = findSubsetSum(nums, n/2, n-1);
+        Arrays.sort(secondHalfSum);
+        long ans = Long.MAX_VALUE;
+        for (int i = 0;i < firstHalfSum.length;i++) {
+            long semiGoal = goal - firstHalfSum[i];
+            int lb = findLowerBound(secondHalfSum, semiGoal);
+            int hb = Math.min(lb + 1, secondHalfSum.length - 1);
+            ans = Math.min(ans, Math.abs(semiGoal - secondHalfSum[lb]));
+            ans = Math.min(ans, Math.abs(semiGoal - secondHalfSum[hb]));
+        }
+        return (int)ans;
+    }
+}
