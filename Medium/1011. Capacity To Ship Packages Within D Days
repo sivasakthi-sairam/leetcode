@@ -1,0 +1,35 @@
+class Solution {
+    public static boolean isCapable(int capacity, int days, int[] weights) {
+        int ships = 1;
+        int cur = capacity;
+        for (int i : weights) {
+            if ((cur - i) < 0) {
+                cur = capacity;
+                ships++;
+            }
+            cur -= i;
+        }
+        return (ships <= days);
+    }
+
+    public int shipWithinDays(int[] weights, int days) {
+        int sum = 0;
+        int max = 0;
+        for (int i : weights) {
+            max = Math.max(max, i);
+            sum += i;
+        }
+        int l = max, r = sum;
+        int result = Integer.MAX_VALUE;
+        while(l <= r) {
+            int m = (l + r) / 2;
+            if (isCapable(m, days, weights)) {
+                r = m - 1;
+                result = Math.min(result, m);
+            } else {
+                l = m + 1;
+            }
+        }
+        return result;
+    }
+}
