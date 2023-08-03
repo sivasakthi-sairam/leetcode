@@ -1,0 +1,36 @@
+class Solution {
+    public int sumSubarrayMins(int[] arr) {
+        int n = arr.length;
+        int[] prevMin = new int[n];
+        int[] nextMin = new int[n];
+        for (int i = 0;i < n;i++) {
+            prevMin[i] = i;
+            nextMin[i] = n - i - 1;
+        }
+        Stack<Integer> s1 = new Stack<>();
+        for (int i = 0;i < n;i++) {
+            while (!s1.empty() && arr[s1.peek()] > arr[i]) {
+                nextMin[s1.peek()] = i - s1.peek() - 1;
+                s1.pop();
+            }
+            s1.push(i);
+        }
+        Stack<Integer> s2 = new Stack<>();
+        for (int i = n-1;i >= 0;i--) {
+            while(!s2.empty() && arr[s2.peek()] >= arr[i]) {
+                prevMin[s2.peek()] = s2.peek() - i - 1;
+                s2.pop();
+            }
+            s2.push(i);
+        }
+        long result = 0;
+        int M = (int) 1e9 + 7;
+        for (int i = 0;i < n;i++) {
+            long a = arr[i] * (prevMin[i] + 1);
+            long b = a * (nextMin[i] + 1);
+            result += b;
+            result %= M;
+        }
+        return (int)result;
+    }
+}
