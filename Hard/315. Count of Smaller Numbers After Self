@@ -1,0 +1,62 @@
+class Solution {
+    public static void merge(int[] nums, int[] index, int[] inversions, int l, int m, int r) {
+        int n1 = m - l + 1;
+        int n2 = r - m;
+        int[] a = new int[n1];
+        int[] b = new int[n2];
+        for (int i = 0;i < n1;i++) {
+            a[i] = index[l + i];
+        }
+        for (int i = 0;i < n2;i++) {
+            b[i] = index[m + 1 + i];
+        }
+        int i = 0, j = 0, k = l;
+        int rCounter = 0;
+        while(i < n1 && j < n2) {
+            if (nums[a[i]] <= nums[b[j]]) {
+                index[k] = a[i];
+                inversions[a[i]] += rCounter;
+                i++;
+            } else {
+                index[k] = b[j];
+                rCounter++;
+                j++;
+            }
+            k++;
+        }
+        while(i < n1) {
+            index[k] = a[i];
+            inversions[a[i]] += rCounter;
+            i++;
+            k++;
+        }
+        while(j < n2) {
+            index[k] = b[j];
+            j++;
+            k++;
+        }
+    }
+
+    public static void mergeSort(int[] nums, int[] index, int[] inversions, int l, int r) {
+        if (l < r) {
+            int m = (l + (r-1)) / 2;
+            mergeSort(nums, index, inversions, l, m);
+            mergeSort(nums, index, inversions, m+1, r);
+            merge(nums, index, inversions, l, m, r);
+        }
+    }
+
+    public List<Integer> countSmaller(int[] nums) {
+        int[] inversions = new int[nums.length];
+        int[] index = new int[nums.length];
+        for (int i = 0;i < nums.length;i++) {
+            index[i] = i;
+        }
+        mergeSort(nums, index, inversions, 0, nums.length - 1);
+        List<Integer> result = new ArrayList<>();
+        for (int i : inversions) {
+            result.add(i);
+        }
+        return result;
+    }
+}
