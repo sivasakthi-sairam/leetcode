@@ -1,0 +1,77 @@
+class Solution {
+
+    public static class Point {
+        int x, y;
+        public Point (int a, int b) {
+            this.x = a;
+            this.y = b;
+        }
+    }
+
+    public static int orientation(Point p1, Point p2, Point p3) {
+        int val = (p2.y - p1.y) * (p3.x - p2.x) - (p2.x - p1.x) * (p3.y - p2.y);
+        if (val == 0) {
+            return 0;
+        }
+        return (val > 0)? 1: 2;
+    }
+
+    public static double getDistance(Point a, Point b) {
+        double dist = Math.sqrt(((a.x - b.x) * (a.x - b.x)) + ((a.y - b.y) * (a.y - b.y)));
+        return dist;
+    }
+
+    public static Set<Point> convexHull(Point[] points, int n) {
+        Set<Point> hull = new HashSet<>();
+        int l = 0;
+        for (int i = 1; i < n; i++) {
+            if (points[i].x < points[l].x) {
+                l = i;
+            }
+        }
+        int p = l, q;
+        do {
+            hull.add(points[p]);
+            q = 0;
+            List<Point> collinear = new ArrayList<>();
+            for (int i = 0; i < n; i++) {
+                if (i == p) {
+                    continue;
+                }
+                int angle = orientation(points[p], points[i], points[q]);
+                if (angle == 2 || q == p) {
+                    q = i;
+                    collinear.clear();
+                } else if (angle == 0) {
+                    if (getDistance(points[p], points[q]) < getDistance(points[p], points[i])) {
+                        collinear.add(points[q]);
+                        q = i;
+                    } else {
+                        collinear.add(points[i]);
+                    }
+                }
+            }
+            hull.addAll(collinear);
+            p = q;
+        } while (p != l && hull.size() != points.length);
+        return hull;
+    }
+
+    public int[][] outerTrees(int[][] trees) {
+        Point[] points = new Point[trees.length];
+        if (trees.length <= 3) {
+            return trees;
+        }
+        for (int i = 0;i < trees.length;i++) {
+            Point p = new Point(trees[i][0], trees[i][1]);
+            points[i] = p;
+        }
+        List<Point> hull = new ArrayList<>(convexHull(points, trees.length));
+        int[][] result = new int[hull.size()][2];
+        for (int i = 0;i < hull.size();i++) {
+            result[i][0] = hull.get(i).x;
+            result[i][1] = hull.get(i).y;
+        }
+        return result;
+    }
+}
