@@ -1,0 +1,49 @@
+class Node {
+    Map<Integer, Node> children;
+    Node () {
+        this.children = new HashMap<>();
+    }
+}
+
+class Trie {
+    Node root;
+    Trie () {
+        this.root = new Node();
+    }
+    void insert(int[] nums) {
+        for (int num : nums) {
+            Node curr = this.root;
+            for (int i = 31;i >= 0;i--) {
+                int currBit = (num >> i) & 1;
+                if (!curr.children.containsKey(currBit)) {
+                    curr.children.put(currBit, new Node());
+                }
+                curr = curr.children.get(currBit);
+            }
+        }
+    }
+}
+
+class Solution {
+    public int findMaximumXOR(int[] nums) {
+        Trie trie = new Trie();
+        trie.insert(nums);
+
+        int max = 0;
+        for (int num : nums) {
+            int ans = 0;
+            Node curr = trie.root;
+            for (int i = 31;i >= 0;i--) {
+                int reqBit = 1 - ((num >> i) & 1);
+                if (curr.children.containsKey(reqBit)) {
+                    ans |= (1 << i);
+                    curr = curr.children.get(reqBit);
+                } else {
+                    curr = curr.children.get(1 - reqBit);
+                }
+            }
+            max = Math.max(max, ans);
+        }
+        return max;
+    }
+}
