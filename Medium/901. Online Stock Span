@@ -1,0 +1,40 @@
+class StockSpanner {
+
+    static class Span {
+        int index;
+        int data;
+        public Span(int index, int data) {
+            this.index = index;
+            this.data = data;
+        }
+    }
+
+    static int idx;
+    static Stack<Span> spanStack;
+
+    public StockSpanner() {
+        idx = 0;
+        spanStack = new Stack<>();
+    }
+
+    public int next(int price) {
+        Span newSpan = new Span(idx++, price);
+        while(!spanStack.empty() && spanStack.peek().data <= price) {
+            spanStack.pop();
+        }
+        int ans;
+        if (spanStack.empty()) {
+            ans = idx;
+        } else {
+            ans = newSpan.index - spanStack.peek().index;
+        }
+        spanStack.push(newSpan);
+        return ans;
+    }
+}
+
+/**
+ * Your StockSpanner object will be instantiated and called as such:
+ * StockSpanner obj = new StockSpanner();
+ * int param_1 = obj.next(price);
+ */
