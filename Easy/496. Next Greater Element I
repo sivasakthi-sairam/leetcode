@@ -1,0 +1,31 @@
+class Solution {
+    public int[] nextGreaterElement(int[] nums1, int[] nums2) {
+        Stack<Integer> stack = new Stack<>();
+        int[] allResult = new int[nums2.length];
+        stack.push(0);
+        Map<Integer, Integer> reqMap = new HashMap<>();
+        int[] result = new int[nums1.length];
+        for (int i = 0;i < nums1.length;i++) {
+            reqMap.put(nums1[i], i);
+            result[i] = -1;
+        }
+        for (int i = 1;i < nums2.length;i++) {
+            if (nums2[i] <= nums2[stack.peek()]) {
+                stack.push(i);
+            } else {
+                while (!stack.empty() && nums2[i] > nums2[stack.peek()]) {
+                    allResult[stack.peek()] = nums2[i];
+                    if (reqMap.containsKey(nums2[stack.peek()])) {
+                        result[reqMap.get(nums2[stack.peek()])] = nums2[i];
+                    }
+                    stack.pop();
+                }
+                stack.push(i);
+            }
+        }
+        while (!stack.empty()) {
+            allResult[stack.pop()] = -1;
+        }
+        return result;
+    }
+}
