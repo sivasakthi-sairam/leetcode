@@ -1,0 +1,52 @@
+class Solution {
+    public int orangesRotting(int[][] grid) {
+        int rows = grid.length;
+        int cols = grid[0].length;
+        int count = 2;
+        boolean changed = false;
+        while (true) {
+            for (int i = 0;i < rows;i++) {
+                for (int j = 0;j < cols;j++) {
+                    if (grid[i][j] == count) {
+                        if (isSafe(i+1, j, rows, cols) && grid[i+1][j] == 1) {
+                            grid[i+1][j] = count + 1;
+                            changed = true;
+                        }
+                        if (isSafe(i-1, j, rows, cols) && grid[i-1][j] == 1) {
+                            grid[i-1][j] = count + 1;
+                            changed = true;
+                        }
+                        if (isSafe(i, j+1, rows, cols) && grid[i][j+1] == 1) {
+                            grid[i][j+1] = count + 1;
+                            changed = true;
+                        }
+                        if (isSafe(i, j-1, rows, cols) && grid[i][j-1] == 1) {
+                            grid[i][j-1] = count + 1;
+                            changed = true;
+                        }
+                    }
+                }
+            }
+            if (!changed) {
+                break;
+            }
+            changed = false;
+            count++;
+        }
+        for (int i = 0;i < rows;i++) {
+            for (int j = 0;j < cols;j++) {
+                if (grid[i][j] == 1) {
+                    return -1;
+                }
+            }
+        }
+        return count - 2;
+    }
+
+    public static boolean isSafe(int i, int j, int rows, int cols) {
+        if (i >= 0 && i < rows && j >= 0 && j < cols) {
+            return true;
+        }
+        return false;
+    }
+}
