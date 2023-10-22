@@ -1,0 +1,108 @@
+class Node {
+    int key;
+    int value;
+    Node prev;
+    Node next;
+    public Node (int key, int value) {
+        this.key = key;
+        this.value = value;
+    }
+}
+
+class DoublyLinkedList {
+    Node head;
+    Node tail;
+    public DoublyLinkedList() {
+        head = new Node(-1, -1);
+        tail = new Node(-1, -1);
+        head.next = tail;
+        tail.prev = head;
+    }
+
+    void addNode(Node cur) {
+        Node temp = head.next;
+        head.next = cur;
+        temp.prev = cur;
+        cur.prev = head;
+        cur.next = temp;
+    }
+
+    void deleteNode(Node cur) {
+        Node prevv = cur.prev;
+        Node nextt = cur.next;
+        prevv.next = nextt;
+        nextt.prev = prevv;
+    }
+
+    boolean isEmpty() {
+        return head.next == tail && tail.prev == head;
+    }
+}
+
+class LFUCache {
+
+    Map<Integer, Node> nodeMap;
+    Map<Integer, DoublyLinkedList> listMap;
+    Map<Integer, Integer> countMap;
+    int lfuCount;
+    int cap;
+
+    public LFUCache(int capacity) {
+        nodeMap = new HashMap<>();
+        listMap = new HashMap<>();
+        countMap = new HashMap<>();
+        lfuCount = 0;
+        cap = capacity;
+    }
+
+    public void getCounter (int key) {
+        int count = countMap.get(key);
+        Node preNode = nodeMap.get(key);
+        listMap.get(count).deleteNode(preNode);
+        if (!listMap.containsKey(count + 1)) {
+            listMap.put(count+1, new DoublyLinkedList());
+        }
+        listMap.get(count+1).addNode(preNode);
+        countMap.put(key, count+1);
+        nodeMap.put(key, listMap.get(count+1).head.next);
+        if (count == lfuCount && listMap.get(count).isEmpty()) {
+            lfuCount++;
+        }
+    }
+
+    public int get(int key) {
+        if (!nodeMap.containsKey(key)) {
+            return -1;
+        }
+        getCounter(key);
+        return nodeMap.get(key).value;
+    }
+
+    public void put(int key, int value) {
+        if (nodeMap.containsKey(key)) {
+            nodeMap.get(key).value = value;
+            getCounter(key);
+            return;
+        }
+        if (nodeMap.size() == cap) {
+            Node lfuNode = listMap.get(lfuCount).tail.prev;
+            nodeMap.remove(lfuNode.key);
+            countMap.remove(lfuNode.key);
+            listMap.get(lfuCount).deleteNode(lfuNode);
+        }
+        countMap.put(key, 1);
+        if (!listMap.containsKey(1)) {
+            listMap.put(1, new DoublyLinkedList());
+        }
+        listMap.get(1).addNode(new Node(key, value));
+        nodeMap.put(key, listMap.get(1).head.next);
+        lfuCount = 1;
+    }
+}
+
+/**
+ * Your LFUCache object will be instantiated and called as such:
+ * LFUCache obj = new LFUCache(capacity);
+ * int param_1 = obj.get(key);
+ * obj.put(key,value);
+ */
