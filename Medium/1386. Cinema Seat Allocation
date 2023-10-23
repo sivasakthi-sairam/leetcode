@@ -1,0 +1,77 @@
+class Solution {
+
+    public static boolean checkTwo(int[] a) {
+        for (int i = 1;i < 9;i++) {
+            if (a[i] == 1) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean checkOne(int[] a) {
+        int count = 0;
+        for (int i = 3;i <= 6;i++) {
+            if (a[i] == 1) {
+                break;
+            }
+            count++;
+        }
+        if (count == 4) {
+            return true;
+        }
+        count = 0;
+        for (int i = 1;i <= 4;i++) {
+            if (a[i] == 1) {
+                break;
+            }
+            count++;
+        }
+        if (count == 4) {
+            return true;
+        }
+        count = 0;
+        for (int i = 5;i <= 8;i++) {
+            if (a[i] == 1) {
+                break;
+            }
+            count++;
+        }
+        if (count == 4) {
+            return true;
+        }
+        return false;
+    }
+
+    public int maxNumberOfFamilies(int n, int[][] booked) {
+        Arrays.sort(booked, (a, b) -> {
+            return a[0] - b[0];
+        });
+        int last = booked[0][0];
+        int[] cur = new int[10];
+        int rows = 0;
+        int total = 0;
+        for (int i = 0;i < booked.length;i++) {
+            if (booked[i][0] == last) {
+                cur[booked[i][1] - 1] = 1;
+            } else {
+                rows++;
+                if (checkTwo(cur)) {
+                    total += 2;
+                } else if (checkOne(cur)) {
+                    total += 1;
+                }
+                cur = new int[10];
+                cur[booked[i][1] - 1] = 1;
+                last = booked[i][0];
+            }
+        }
+        rows++;
+        if (checkTwo(cur)) {
+            total += 2;
+        } else if (checkOne(cur)) {
+            total += 1;
+        }
+        return (2 * (n - rows) + total);
+    }
+}
