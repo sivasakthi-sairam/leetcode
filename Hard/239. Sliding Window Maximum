@@ -1,0 +1,32 @@
+class Node {
+    int val;
+    int idx;
+    public Node (int val, int idx) {
+        this.val = val;
+        this.idx = idx;
+    }
+}
+
+class CustomComparator implements Comparator<Node> {
+    public int compare (Node a, Node b) {
+        return b.val - a.val;
+    }
+}
+
+class Solution {
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        int n = nums.length;
+        PriorityQueue<Node> heap = new PriorityQueue<>(n, new CustomComparator());
+        int[] ans = new int[n-k+1];
+        for (int i = 0;i < n;i++) {
+            while (heap.size() > 0 && heap.peek().idx <= i - k) {
+                heap.remove();
+            }
+            heap.add(new Node(nums[i], i));
+            if (i - k + 1 >= 0) {
+                ans[i - k + 1] = heap.peek().val;
+            }
+        }
+        return ans;
+    }
+}
