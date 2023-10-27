@@ -1,0 +1,66 @@
+class AvailNode {
+    int weight;
+    int idx;
+    public AvailNode (int weight, int idx) {
+        this.weight = weight;
+        this.idx = idx;
+    }
+}
+
+class UnavailNode {
+    int timeFree;
+    int weight;
+    int idx;
+    public UnavailNode (int timeFree, int weight, int idx) {
+        this.timeFree = timeFree;
+        this.weight = weight;
+        this.idx = idx;
+    }
+}
+
+class AvailComparator implements Comparator<AvailNode> {
+    public int compare (AvailNode a, AvailNode b) {
+        if (a.weight == b.weight) {
+            return a.idx - b.idx;
+        }
+        return a.weight - b.weight;
+    }
+}
+
+class UnavailComparator implements Comparator<UnavailNode> {
+    public int compare (UnavailNode a, UnavailNode b) {
+        if (a.timeFree == b.timeFree) {
+            if (a.weight == b.weight) {
+                return a.idx - b.idx;
+            }
+            return a.weight - b.weight;
+        }
+        return a.timeFree - b.timeFree;
+    }
+}
+
+class Solution {
+    public int[] assignTasks(int[] servers, int[] tasks) {
+        PriorityQueue<AvailNode> availHeap = new PriorityQueue<>(servers.length, new AvailComparator());
+        for (int i = 0;i < servers.length;i++) {
+            availHeap.add(new AvailNode(servers[i], i));
+        }
+        PriorityQueue<UnavailNode> unavailHeap = new PriorityQueue<>(servers.length, new UnavailComparator());
+        int[] ans = new int[tasks.length];
+        int t = 0;
+        for (int i = 0;i < tasks.length;i++) {
+            t = Math.max(t, i);
+            if (availHeap.size() == 0) {
+                t = unavailHeap.peek().timeFree;
+            }
+            while (unavailHeap.size() > 0 && unavailHeap.peek().timeFree == t) {
+                availHeap.add(new AvailNode(unavailHeap.peek().weight, unavailHeap.peek().idx));
+                unavailHeap.remove();
+            }
+            ans[i] = availHeap.peek().idx;
+            unavailHeap.add(new UnavailNode(t + tasks[i], availHeap.peek().weight, availHeap.peek().idx));
+            availHeap.remove();
+        }
+        return ans;
+    }
+}
