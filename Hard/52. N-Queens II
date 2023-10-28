@@ -1,0 +1,58 @@
+class Solution {
+    static int result;
+
+    public int totalNQueens(int n) {
+        result = 0;
+        char[][] board = new char[n][n];
+        for (int i = 0;i < n;i++) {
+            for (int j = 0;j < n;j++) {
+                board[i][j] = '.';
+            }
+        }
+        findAllCombinations(board, 0, n);
+        return result;
+    }
+
+    public static void findAllCombinations(char[][] board, int col, int dim) {
+        if (col == dim) {
+            result++;
+            return;
+        }
+        for (int i = 0;i < dim;i++) {
+            if (isSafe(board, i, col, dim)) {
+                board[i][col] = 'Q';
+                findAllCombinations(board, col+1, dim);
+            }
+            board[i][col] = '.';
+        }
+    }
+
+    public static boolean isSafe(char[][] board, int r, int c, int dim) {
+        int row = r, col = c;
+        while(row >= 0 && col >= 0) {
+            if (board[row][col] == 'Q') {
+                return false;
+            }
+            row--;
+            col--;
+        }
+        row = r;
+        col = c;
+        while (row < dim && col >= 0) {
+            if (board[row][col] == 'Q') {
+                return false;
+            }
+            row++;
+            col--;
+        }
+        row = r;
+        col = c;
+        while (col >= 0) {
+            if (board[row][col] == 'Q') {
+                return false;
+            }
+            col--;
+        }
+        return true;
+    }
+}
