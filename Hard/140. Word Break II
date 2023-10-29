@@ -1,0 +1,22 @@
+class Solution {
+    public static void backtracking(int n, String s, String ans, List<String> dict, List<String> res) {
+        for (int i = 1;i <= n;i++) {
+            String cur = s.substring(0, i);
+            if (dict.contains(cur)) {
+                if (i == n) {
+                    ans += cur;
+                    res.add(ans);
+                    return;
+                }
+                backtracking(n - i, s.substring(i), ans + cur + " ", dict, res);
+            }
+        }
+    }
+
+    public List<String> wordBreak(String s, List<String> wordDict) {
+        String ans = new String();
+        List<String> result = new ArrayList<>();
+        backtracking(s.length(), s, "", wordDict, result);
+        return result;
+    }
+}
