@@ -1,0 +1,29 @@
+class Solution {
+    public static void backtracking(List<String> ans, Stack<Character> stack, int open, int close, int n) {
+        if (open == close && open == n) {
+            String s = new String();
+            for (char i : stack) {
+                s += i;
+            }
+            ans.add(s);
+            return;
+        }
+        if (open < n) {
+            stack.push('(');
+            backtracking(ans, stack, open + 1, close, n);
+            stack.pop();
+        }
+        if (close < open) {
+            stack.push(')');
+            backtracking(ans, stack, open, close + 1, n);
+            stack.pop();
+        }
+    }
+
+    public List<String> generateParenthesis(int n) {
+        List<String> ans = new ArrayList<>();
+        Stack<Character> stack = new Stack<>();
+        backtracking(ans, stack, 0, 0, n);
+        return ans;
+    }
+}
