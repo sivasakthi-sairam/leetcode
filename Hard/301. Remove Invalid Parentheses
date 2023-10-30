@@ -1,0 +1,47 @@
+class Solution {
+    public static int findMinRemove(String s) {
+        Stack<Character> stack = new Stack<>();
+        for (int i = 0;i < s.length();i++) {
+            if (s.charAt(i) == '(') {
+                stack.push('(');
+            } else if (s.charAt(i) == ')') {
+                if (stack.size() > 0 && stack.peek() == '(') {
+                    stack.pop();
+                } else {
+                    stack.push(')');
+                }
+            }
+        }
+        return stack.size();
+    }
+
+    public static void backtracking(List<String> ans, Set<String> set, String s, int minRemove) {
+        if (set.contains(s)) {
+            return;
+        }
+        set.add(s);
+        if (minRemove == 0) {
+            if (findMinRemove(s) == 0) {
+                ans.add(s);
+            }
+            return;
+        }
+        for (int i = 0;i < s.length();i++) {
+            if (s.charAt(i) == '(' || s.charAt(i) == ')') {
+                String a = s.substring(0, i);
+                String b = s.substring(i+1);
+                if (!set.contains(a + b)) {
+                    backtracking(ans, set, a + b, minRemove - 1);
+                }
+            }
+        }
+    }
+
+    public List<String> removeInvalidParentheses(String s) {
+        List<String> ans = new ArrayList<>();
+        Set<String> set = new HashSet<>();
+        int minRemove = findMinRemove(s);
+        backtracking(ans, set, s, minRemove);
+        return ans;
+    }
+}
