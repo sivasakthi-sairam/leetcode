@@ -1,0 +1,49 @@
+class Solution {
+    public static boolean backtracking(int r, int c, char[][] board) {
+        if (r == board.length - 1 && c == board[0].length) {
+            return true;
+        }
+        if (c == board[0].length) {
+            return backtracking(r + 1, 0, board);
+        }
+        if (board[r][c] != '.') {
+            return backtracking(r, c+1, board);
+        }
+        for (int i = 1;i <= 9;i++) {
+            char x = String.valueOf(i).charAt(0);
+            if (isSafe(r, c, x, board)) {
+                board[r][c] = x;
+                if(backtracking(r, c+1, board)) {
+                    return true;
+                }
+                board[r][c] = '.';
+            }
+        }
+        return false;
+    }
+
+    public static boolean isSafe(int r, int c, char x, char[][] board) {
+        for (int i = 0;i < 9;i++) {
+            if (board[r][i] == x) {
+                return false;
+            }
+        }
+        for (int i = 0;i < 9;i++) {
+            if (board[i][c] == x) {
+                return false;
+            }
+        }
+        for (int i = 0;i < 3;i++) {
+            for (int j = 0;j < 3;j++) {
+                if (board[(r - r%3) + i][(c - c%3) + j] == x) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public void solveSudoku(char[][] board) {
+        backtracking(0, 0, board);
+    }
+}
