@@ -1,0 +1,71 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Codec {
+
+    static String encodeStr;
+    static String decodeStr;
+
+    public static void preOrderDfs(TreeNode root) {
+        if (root == null) {
+            encodeStr += "*";
+            return;
+        }
+        encodeStr += root.val + ",";
+        preOrderDfs(root.left);
+        preOrderDfs(root.right);
+    }
+
+    // Encodes a tree to a single string.
+    public String serialize(TreeNode root) {
+        encodeStr = new String();
+        preOrderDfs(root);
+        System.out.println(encodeStr);
+        return encodeStr;
+    }
+
+    public static TreeNode decode () {
+        if (decodeStr.length() == 0) {
+            return null;
+        }
+        if (decodeStr.charAt(0) == '*') {
+            decodeStr = decodeStr.substring(1);
+            return null;
+        }
+        int val = 0;
+        int pos = 0;
+        boolean isNegative = false;
+        while (decodeStr.charAt(pos) != ',') {
+            if (decodeStr.charAt(pos) == '-') {
+                isNegative = true;
+                pos++;
+                continue;
+            }
+            val *= 10;
+            val += decodeStr.charAt(pos) - '0';
+            pos++;
+        }
+        decodeStr = decodeStr.substring(pos + 1);
+        TreeNode cur = isNegative ? new TreeNode(-val) : new TreeNode(val);
+        cur.left = decode();
+        cur.right = decode();
+        return cur;
+    }
+
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(String data) {
+        decodeStr = data;
+        return decode();
+    }
+}
+
+// Your Codec object will be instantiated and called as such:
+// Codec ser = new Codec();
+// Codec deser = new Codec();
+// TreeNode ans = deser.deserialize(ser.serialize(root));
