@@ -1,0 +1,50 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public static void findParentBfs(TreeNode curr, TreeNode parent, Map<Integer, TreeNode> parentMap) {
+        if (curr == null) {
+            return;
+        }
+        parentMap.put(curr.val, parent);
+        findParentBfs(curr.left, curr, parentMap);
+        findParentBfs(curr.right, curr, parentMap);
+    }
+
+    public List<Integer> distanceK(TreeNode root, TreeNode target, int k) {
+        Map<Integer, TreeNode> parentMap = new HashMap<>();
+        findParentBfs(root, null, parentMap);
+        Set<TreeNode> visited = new HashSet<>();
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(target);
+        while (queue.size() > 0 && k > 0) {
+            k -= 1;
+            int size = queue.size();
+            for(int i = 0;i < size;i++) {
+                TreeNode curr = queue.remove();
+                visited.add(curr);
+                TreeNode parent = parentMap.get(curr.val);
+                if (parent != null && !visited.contains(parent)) {
+                    queue.add(parent);
+                }
+                if (curr.left != null && !visited.contains(curr.left)) {
+                    queue.add(curr.left);
+                }
+                if (curr.right != null && !visited.contains(curr.right)) {
+                    queue.add(curr.right);
+                }
+            }
+        }
+        List<Integer> result = new ArrayList<>();
+        while(queue.size() > 0) {
+            result.add(queue.remove().val);
+        }
+        return result;
+    }
+}
