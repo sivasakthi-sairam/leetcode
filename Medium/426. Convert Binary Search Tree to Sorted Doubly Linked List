@@ -1,0 +1,52 @@
+/*
+// Definition for a Node.
+class Node {
+    public int val;
+    public Node left;
+    public Node right;
+
+    public Node() {}
+
+    public Node(int _val) {
+        val = _val;
+    }
+
+    public Node(int _val,Node _left,Node _right) {
+        val = _val;
+        left = _left;
+        right = _right;
+    }
+};
+*/
+
+class Solution {
+    static Node first;
+    static Node currLast;
+
+    public static void inorderLinking(Node curr) {
+        if (curr == null) {
+            return;
+        }
+        inorderLinking(curr.left);
+        if (currLast == null) {
+            first = curr;
+        } else {
+            curr.left = currLast;
+            currLast.right = curr;
+        }
+        currLast = curr;
+        inorderLinking(curr.right);
+    }
+
+    public Node treeToDoublyList(Node root) {
+        if (root == null) {
+            return null;
+        }
+        first = null;
+        currLast = null;
+        inorderLinking(root);
+        first.left = currLast;
+        currLast.right = first;
+        return first;
+    }
+}
