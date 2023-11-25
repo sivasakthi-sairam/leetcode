@@ -1,0 +1,36 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public static Pair<Integer, Integer> postOrderFinding(TreeNode curr) {
+        if (curr == null) {
+            return new Pair<>(0, 0);
+        }
+        Pair<Integer, Integer> left = postOrderFinding(curr.left);
+        Pair<Integer, Integer> right = postOrderFinding(curr.right);
+        int curMaxTree = Math.max(left.getValue(), right.getValue());
+        curMaxTree = Math.max(curMaxTree, left.getKey() + right.getKey() + 1);
+        int curLongSide = Math.max(left.getKey(), right.getKey()) + 1;
+        return new Pair<>(curLongSide, curMaxTree);
+    }
+
+    public int diameterOfBinaryTree(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        Pair<Integer, Integer> ansPair = postOrderFinding(root);
+        return Math.max(ansPair.getKey(), ansPair.getValue()) - 1;
+    }
+}
