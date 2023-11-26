@@ -1,0 +1,43 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public static void inorderTraversal(TreeNode curr, List<Integer> inorder) {
+        if (curr == null) {
+            return;
+        }
+        inorderTraversal(curr.left, inorder);
+        inorder.add(curr.val);
+        inorderTraversal(curr.right, inorder);
+    }
+
+    public static TreeNode mergeSortLikeDividing(List<Integer> inorder, int l, int h) {
+        if (l > h) {
+            return null;
+        }
+        int m = (l + h) / 2;
+        TreeNode curr = new TreeNode(inorder.get(m));
+        curr.left = mergeSortLikeDividing(inorder, l, m - 1);
+        curr.right = mergeSortLikeDividing(inorder, m + 1, h);
+        return curr;
+    }
+
+    public TreeNode balanceBST(TreeNode root) {
+        List<Integer> inorder = new ArrayList<>();
+        inorderTraversal(root, inorder);
+        TreeNode balancedRoot = mergeSortLikeDividing(inorder, 0, inorder.size() - 1);
+        return balancedRoot;
+    }
+}
