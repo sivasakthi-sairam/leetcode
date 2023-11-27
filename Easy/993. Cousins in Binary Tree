@@ -1,0 +1,60 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    static int xVal, yVal;
+    static int xParent, yParent;
+
+    public static int findHeightAndParent(TreeNode curr, int req, int height) {
+        if (curr == null) {
+            return 0;
+        }
+        if (curr.val == req) {
+            return height;
+        }
+        if (req == xVal) {
+            xParent = curr.val;
+        } else {
+            yParent = curr.val;
+        }
+        int left = findHeightAndParent(curr.left, req, height + 1);
+        if (left != 0) {
+            return left;
+        }
+        if (req == xVal) {
+            xParent = curr.val;
+        } else {
+            yParent = curr.val;
+        }
+        int right = findHeightAndParent(curr.right, req, height + 1);
+        return right;
+    }
+
+    public boolean isCousins(TreeNode root, int x, int y) {
+        if (x == root.val || y == root.val) {
+            return false;
+        }
+        xVal = x;
+        yVal = y;
+        xParent = -1;
+        yParent = -1;
+        int xHeight = findHeightAndParent(root, x, 0);
+        int yHeight = findHeightAndParent(root, y, 0);
+        if (xHeight == yHeight && xParent != yParent) {
+            return true;
+        }
+        return false;
+    }
+}
