@@ -1,0 +1,43 @@
+class Solution {
+    int[] count;
+    int[] result;
+    List<Set<Integer>> tree;
+
+    public void postOrder(int root, int pre) {
+        for (int i : tree.get(root)) {
+            if (i == pre) {
+                continue;
+            }
+            postOrder(i, root);
+            count[root] += count[i];
+            result[root] += count[i] + result[i];
+        }
+        count[root]++;
+    }
+
+    public void preOrder(int root, int pre) {
+        for (int i : tree.get(root)) {
+            if (i == pre) {
+                continue;
+            }
+            result[i] = result[root] - count[i] + (count.length - count[i]);
+            preOrder(i, root);
+        }
+    }
+
+    public int[] sumOfDistancesInTree(int n, int[][] edges) {
+        count = new int[n];
+        result = new int[n];
+        tree = new ArrayList<>();
+        for (int i = 0;i < n;i++) {
+            tree.add(new HashSet<Integer>());
+        }
+        for (int i = 0;i < edges.length;i++) {
+            tree.get(edges[i][0]).add(edges[i][1]);
+            tree.get(edges[i][1]).add(edges[i][0]);
+        }
+        postOrder(0, -1);
+        preOrder(0, -1);
+        return result;
+    }
+}
