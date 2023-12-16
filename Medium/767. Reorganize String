@@ -1,0 +1,45 @@
+class Solution {
+    class Node {
+        int freq;
+        char c;
+        public Node (int freq, char c) {
+            this.freq = freq;
+            this.c = c;
+        }
+    }
+
+    class NodeComparator implements Comparator<Node> {
+        public int compare (Node a, Node b) {
+            return b.freq - a.freq;
+        }
+    }
+
+    public String reorganizeString(String s) {
+        Map<Character, Integer> charMap = new HashMap<>();
+        for (int i = 0;i < s.length();i++) {
+            charMap.put(s.charAt(i), charMap.getOrDefault(s.charAt(i), 0) + 1);
+        }
+        PriorityQueue<Node> maxHeap = new PriorityQueue<>(charMap.size(), new NodeComparator());
+        for (char i : charMap.keySet()) {
+            maxHeap.add(new Node(charMap.get(i), i));
+        }
+        Node prev = null;
+        String result = "";
+        while (maxHeap.size() > 0 || prev != null) {
+            if (maxHeap.size() == 0) {
+                return "";
+            }
+            Node curr = maxHeap.remove();
+            result += curr.c;
+            if (prev != null) {
+                maxHeap.add(prev);
+                prev = null;
+            }
+            curr.freq--;
+            if (curr.freq > 0) {
+                prev = curr;
+            }
+        }
+        return result;
+    }
+}
