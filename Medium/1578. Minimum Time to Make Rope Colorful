@@ -1,0 +1,19 @@
+class Solution {
+    public int minCost(String colors, int[] neededTime) {
+        int start = 0, end = 0;
+        int totalTime = 0;
+        int n = neededTime.length;
+        while (start < n && end < n) {
+            int groupTotal = 0;
+            int groupMax = 0;
+            while (end < n && colors.charAt(start) == colors.charAt(end)) {
+                groupMax = Math.max(groupMax, neededTime[end]);
+                groupTotal += neededTime[end];
+                end++;
+            }
+            totalTime += groupTotal - groupMax;
+            start = end;
+        }
+        return totalTime;
+    }
+}
