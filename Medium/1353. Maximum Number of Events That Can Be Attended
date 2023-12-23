@@ -1,0 +1,27 @@
+class Solution {
+    public int maxEvents(int[][] events) {
+        Arrays.sort(events, (a, b) -> {
+            return a[0] - b[0];
+        });
+        PriorityQueue<Integer> minHeap = new PriorityQueue<>();
+        int n = events.length;
+        int index = 0, day = 0;
+        int result = 0;
+        while (index < n || minHeap.size() > 0) {
+            if (minHeap.size() == 0) {
+                day = events[index][0];
+            }
+            while (index < n && events[index][0] <= day) {
+                minHeap.add(events[index][1]);
+                index++;
+            }
+            minHeap.remove();
+            result++;
+            day++;
+            while (minHeap.size() > 0 && minHeap.peek() < day) {
+                minHeap.remove();
+            }
+        }
+        return result;
+    }
+}
