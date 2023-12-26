@@ -1,0 +1,64 @@
+class Solution {
+
+    public boolean detectCycleUtil(List<List<Integer>> adjMatrix, int[] visitStatus, int v) {
+        if (visitStatus[v] == 1) {
+            return true;
+        }
+        if (visitStatus[v] == 2) {
+            return false;
+        }
+        visitStatus[v] = 1;
+        for (int i : adjMatrix.get(v)) {
+            if (detectCycleUtil(adjMatrix, visitStatus, i)) {
+                return true;
+            }
+        }
+        visitStatus[v] = 2;
+        return false;
+    }
+
+    public boolean detectCycle(int n, List<List<Integer>> adjMatrix) {
+        int[] visitStatus = new int[n];
+        for (int i = 0;i < n;i++) {
+            if (detectCycleUtil(adjMatrix, visitStatus, i)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void dfs(List<List<Integer>> adjMatrix, boolean[] visited, Stack<Integer> stack, int v) {
+        visited[v] = true;
+        for (int i : adjMatrix.get(v)) {
+            if (!visited[i]) {
+                dfs(adjMatrix, visited, stack, i);
+            }
+        }
+        stack.push(v);
+    }
+
+    public int[] findOrder(int numCourses, int[][] prereq) {
+        List<List<Integer>> adjMatrix = new ArrayList<>();
+        for (int i = 0;i < numCourses;i++) {
+            adjMatrix.add(new ArrayList<>());
+        }
+        for (int i = 0;i < prereq.length;i++) {
+            adjMatrix.get(prereq[i][1]).add(prereq[i][0]);
+        }
+        if (detectCycle(numCourses, adjMatrix)) {
+            return new int[]{};
+        }
+        int[] ans = new int[numCourses];
+        boolean[] visited = new boolean[numCourses];
+        Stack<Integer> stack = new Stack<>();
+        for (int i = 0;i < numCourses;i++) {
+            if (!visited[i]) {
+                dfs(adjMatrix, visited, stack, i);
+            }
+        }
+        for (int i = 0;i < numCourses;i++) {
+            ans[i] = stack.pop();
+        }
+        return ans;
+    }
+}
