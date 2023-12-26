@@ -1,0 +1,39 @@
+class Solution {
+    public boolean isCyclicUtil(List<List<Integer>> adjMatrix, int[] visited, int v) {
+        if (visited[v] == 1) {
+            return true;
+        }
+        if (visited[v] == 2) {
+            return false;
+        }
+        visited[v] = 1;
+        for (int i : adjMatrix.get(v)) {
+            if (isCyclicUtil(adjMatrix, visited, i)) {
+                return true;
+            }
+        }
+        visited[v] = 2;
+        return false;
+    }
+
+    public boolean isCyclic(List<List<Integer>> adjMatrix, int n) {
+        int[] visited = new int[n];
+        for (int i = 0;i < n;i++) {
+            if (isCyclicUtil(adjMatrix, visited, i)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean canFinish(int numCourses, int[][] prereq) {
+        List<List<Integer>> adjMatrix = new ArrayList<>();
+        for (int i = 0;i < numCourses;i++) {
+            adjMatrix.add(new ArrayList<>());
+        }
+        for (int i = 0;i < prereq.length;i++) {
+            adjMatrix.get(prereq[i][1]).add(prereq[i][0]);
+        }
+        return !isCyclic(adjMatrix, numCourses);
+    }
+}
