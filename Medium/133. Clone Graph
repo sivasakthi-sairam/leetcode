@@ -1,0 +1,53 @@
+/*
+// Definition for a Node.
+class Node {
+    public int val;
+    public List<Node> neighbors;
+    public Node() {
+        val = 0;
+        neighbors = new ArrayList<Node>();
+    }
+    public Node(int _val) {
+        val = _val;
+        neighbors = new ArrayList<Node>();
+    }
+    public Node(int _val, ArrayList<Node> _neighbors) {
+        val = _val;
+        neighbors = _neighbors;
+    }
+}
+*/
+
+class Solution {
+    public void dfs(Node actual, Node clone, Node[] visited) {
+        visited[actual.val] = clone;
+        for (Node adjNode : actual.neighbors) {
+            if (visited[adjNode.val] == null) {
+                Node newNode = new Node(adjNode.val);
+                clone.neighbors.add(newNode);
+                dfs(adjNode, newNode, visited);
+            } else {
+                clone.neighbors.add(visited[adjNode.val]);
+            }
+        }
+    }
+
+    public Node cloneGraph(Node node) {
+        if (node == null) {
+            return null;
+        }
+        Node[] visited = new Node[101];
+        Node copy = new Node(node.val);
+        visited[node.val] = copy;
+        for (Node adjNode : node.neighbors) {
+            if (visited[adjNode.val] == null) {
+                Node newNode = new Node(adjNode.val);
+                copy.neighbors.add(newNode);
+                dfs(adjNode, newNode, visited);
+            } else {
+                copy.neighbors.add(visited[adjNode.val]);
+            }
+        }
+        return copy;
+    }
+}
