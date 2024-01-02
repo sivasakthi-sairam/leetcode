@@ -1,0 +1,49 @@
+class Solution {
+
+    class Node {
+        int maxDiff;
+        int row;
+        int col;
+        public Node (int diff, int r, int c) {
+            maxDiff = diff;
+            row = r;
+            col = c;
+        }
+    }
+
+    public static boolean isSafe (int curRow, int curCol, int row, int col) {
+        if (curRow < 0 || curRow >= row || curCol < 0 || curCol >= col) {
+            return false;
+        }
+        return true;
+    }
+
+    public int minimumEffortPath(int[][] heights) {
+        int r = heights.length, c = heights[0].length;
+        PriorityQueue<Node> minHeap = new PriorityQueue<>(r*c, Comparator.comparingInt(node -> node.maxDiff));
+        minHeap.add(new Node(0, 0, 0));
+        boolean[][] visited = new boolean[r][c];
+        int[] dir = new int[]{-1, 0, 1, 0, -1};
+        while (minHeap.size() > 0) {
+            Node curr = minHeap.remove();
+            int row = curr.row;
+            int col = curr.col;
+            if (visited[row][col]) {
+                continue;
+            }
+            visited[row][col] = true;
+            if (row == r-1 && col == c-1) {
+                return curr.maxDiff;
+            }
+            for (int i = 0;i < 4;i++) {
+                int curRow = row + dir[i];
+                int curCol = col + dir[i + 1];
+                if (isSafe(curRow, curCol, r, c)) {
+                    int currAbsDiff = Math.abs(heights[row][col] - heights[curRow][curCol]);
+                    minHeap.add(new Node(Math.max(curr.maxDiff, currAbsDiff), curRow, curCol));
+                }
+            }
+        }
+        return 0;
+    }
+}
