@@ -1,0 +1,54 @@
+class Solution {
+
+    class Node {
+        int dest;
+        int weight;
+        public Node (int dt, int wt) {
+            dest = dt;
+            weight = wt;
+        }
+    }
+
+    class qNode {
+        int vertex;
+        int dist;
+        public qNode (int vtx, int dt) {
+            vertex = vtx;
+            dist = dt;
+        }
+    }
+
+    public int networkDelayTime(int[][] times, int n, int k) {
+        List<List<Node>> adjList = new ArrayList<>();
+        int[] dist = new int[n+1];
+        for (int i = 0;i <= n;i++) {
+            dist[i] = Integer.MAX_VALUE;
+        }
+        for (int i = 0;i <= n;i++) {
+            adjList.add(new ArrayList<>());
+        }
+        for (int[] arr : times) {
+            adjList.get(arr[0]).add(new Node(arr[1], arr[2]));
+        }
+        Queue<qNode> queue = new LinkedList<>();
+        queue.add(new qNode(k, 0));
+        dist[k] = 0;
+        while (queue.size() > 0) {
+            qNode curr = queue.remove();
+            int curVertex = curr.vertex;
+            int curDist = curr.dist;
+            for (Node adjNode : adjList.get(curVertex)) {
+                int nextDist = curDist + adjNode.weight;
+                if (dist[adjNode.dest] > nextDist) {
+                    dist[adjNode.dest] = nextDist;
+                    queue.add(new qNode(adjNode.dest, nextDist));
+                }
+            }
+        }
+        int maxTime = 0;
+        for (int i = 1;i <= n;i++) {
+            maxTime = Math.max(maxTime, dist[i]);
+        }
+        return (maxTime == Integer.MAX_VALUE) ? -1 : maxTime;
+    }
+}
