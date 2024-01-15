@@ -1,0 +1,31 @@
+class Solution {
+    public Set<Integer> dfs(int currCourse, List<List<Integer>> adjList, Map<Integer, Set<Integer>> requisites) {
+        if (!requisites.containsKey(currCourse)) {
+            requisites.put(currCourse, new HashSet<>());
+            for (int parent : adjList.get(currCourse)) {
+                requisites.get(currCourse).add(parent);
+                requisites.get(currCourse).addAll(dfs(parent, adjList, requisites));
+            }
+        }
+        return requisites.get(currCourse);
+    }
+
+    public List<Boolean> checkIfPrerequisite(int numCourses, int[][] prerequisites, int[][] queries) {
+        List<List<Integer>> adjList = new ArrayList<>();
+        for (int i = 0;i < numCourses;i++) {
+            adjList.add(new ArrayList<>());
+        }
+        for (int[] arr : prerequisites) {
+            adjList.get(arr[1]).add(arr[0]);
+        }
+        Map<Integer, Set<Integer>> requisites = new HashMap<>();
+        for (int i = 0;i < numCourses;i++) {
+            dfs(i, adjList, requisites);
+        }
+        List<Boolean> ans = new ArrayList<>();
+        for (int[] query : queries) {
+            ans.add(requisites.get(query[1]).contains(query[0]));
+        }
+        return ans;
+    }
+}
