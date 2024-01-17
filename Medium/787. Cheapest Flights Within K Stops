@@ -1,0 +1,28 @@
+class Solution {
+    public int findCheapestPrice(int n, int[][] flights, int src, int dst, int k) {
+        int inf = Integer.MAX_VALUE;
+        int[] prices = new int[n];
+        for (int i = 0;i < n;i++) {
+            prices[i] = inf;
+        }
+        prices[src] = 0;
+        for (int i = 0;i < (k + 1);i++) {
+            int[] temp = new int[n];
+            for (int j = 0;j < n;j++) {
+                temp[j] = prices[j];
+            }
+            for (int[] arr : flights) {
+                int sorc = arr[0];
+                int dest = arr[1];
+                int cost = arr[2];
+                if (prices[sorc] != inf && prices[sorc] + cost < temp[dest]) {
+                    temp[dest] = prices[sorc] + cost;
+                }
+            }
+            for (int j = 0;j < n;j++) {
+                prices[j] = temp[j];
+            }
+        }
+        return (prices[dst] == inf) ? -1 : prices[dst];
+    }
+}
