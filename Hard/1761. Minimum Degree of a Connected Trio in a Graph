@@ -1,0 +1,26 @@
+class Solution {
+    public int minTrioDegree(int n, int[][] edges) {
+        boolean[][] adjMatrix = new boolean[n + 1][n + 1];
+        int[] degree = new int[n + 1];
+        for (int[] arr : edges) {
+            adjMatrix[arr[0]][arr[1]] = true;
+            adjMatrix[arr[1]][arr[0]] = true;
+            degree[arr[0]]++;
+            degree[arr[1]]++;
+        }
+        int ans = Integer.MAX_VALUE;
+        for (int i = 1;i <= n;i++) {
+            for (int j = i + 1;j <= n;j++) {
+                if (adjMatrix[i][j]) {
+                    for (int k = j + 1;k <= n;k++) {
+                        if (adjMatrix[i][k] && adjMatrix[j][k]) {
+                            int cur = degree[i] + degree[j] + degree[k] - 6;
+                            ans = Math.min(ans, cur);
+                        }
+                    }
+                }
+            }
+        }
+        return (ans == Integer.MAX_VALUE) ? -1 : ans;
+    }
+}
