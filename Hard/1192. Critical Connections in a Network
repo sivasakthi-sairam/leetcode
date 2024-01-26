@@ -1,0 +1,44 @@
+class Solution {
+    int time;
+
+    public void bridgeUtil(int u, boolean[] visited, int[] low, int[] disc, int[] parent, List<List<Integer>> adjList, List<List<Integer>> ans) {
+        visited[u] = true;
+        low[u] = disc[u] = ++time;
+        for (int v : adjList.get(u)) {
+            if (!visited[v]) {
+                parent[v] = u;
+                bridgeUtil(v, visited, low, disc, parent, adjList, ans);
+                low[u] = Math.min(low[u], low[v]);
+                if (low[v] > disc[u]) {
+                    ans.add(Arrays.asList(u, v));
+                }
+            } else if (parent[u] != v) {
+                low[u] = Math.min(low[u], disc[v]);
+            }
+        }
+    }
+
+    public List<List<Integer>> criticalConnections(int n, List<List<Integer>> connections) {
+        time = 0;
+        List<List<Integer>> adjList = new ArrayList<>();
+        for (int i = 0;i < n;i++) {
+            adjList.add(new ArrayList<>());
+        }
+        for (List<Integer> list : connections) {
+            adjList.get(list.get(0)).add(list.get(1));
+            adjList.get(list.get(1)).add(list.get(0));
+        }
+        boolean[] visited = new boolean[n];
+        int[] parent = new int[n];
+        int[] low = new int[n];
+        int[] disc = new int[n];
+        Arrays.fill(parent, -1);
+        List<List<Integer>> ans = new ArrayList<>();
+        for (int i = 0;i < n;i++) {
+            if (!visited[i]) {
+                bridgeUtil(i, visited, low, disc, parent, adjList, ans);
+            }
+        }
+        return ans;
+    }
+}
