@@ -1,0 +1,35 @@
+class Solution {
+    Integer[][] dp;
+
+    public int eggDrop(int k, int n) {
+        if (k == 1) {
+            return n;
+        }
+        if (n == 0 || n == 1) {
+            return n;
+        }
+        if (dp[k][n] != null) {
+            return dp[k][n];
+        }
+        int l = 1, h = n;
+        int ans = Integer.MAX_VALUE;
+        while (l <= h) {
+            int mid = (l + h) / 2;
+            int down = eggDrop(k-1, mid - 1);
+            int up = eggDrop(k, n - mid);
+            int temp = 1 + Math.max(down, up);
+            if (down < up) {
+                l = mid + 1;
+            } else {
+                h = mid - 1;
+            }
+            ans = Math.min(ans, temp);
+        }
+        return dp[k][n] = ans;
+    }
+
+    public int twoEggDrop(int n) {
+        dp = new Integer[3][n+1];
+        return eggDrop(2, n);
+    }
+}
