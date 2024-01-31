@@ -1,0 +1,36 @@
+class Solution {
+    Integer[][] dp;
+
+    public int eggDrop(int k, int n) {
+        if (k == 1) {
+            return n;
+        }
+        if (n <= 0) {
+            return n;
+        }
+        if (dp[k][n] != null) {
+            return dp[k][n];
+        }
+        int l = 1, h = n;
+        int up, down, mid, temp;
+        int ans = Integer.MAX_VALUE;
+        while (l <= h) {
+            mid = (l + h) / 2;
+            up = eggDrop(k, n - mid);
+            down = eggDrop(k-1, mid - 1);
+            temp = 1 + Math.max(up, down);
+            if (up < down) {
+                h = mid - 1;
+            } else {
+                l = mid + 1;
+            }
+            ans = Math.min(ans, temp);
+        }
+        return dp[k][n] = ans;
+    }
+
+    public int superEggDrop(int k, int n) {
+        dp = new Integer[k+1][n+1];
+        return eggDrop(k, n);
+    }
+}
