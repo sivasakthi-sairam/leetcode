@@ -1,0 +1,37 @@
+class Solution {
+    public String convert(String s, int numRows) {
+        if(numRows == 1) {
+            return s;
+        }
+        List<String> strs = new ArrayList<>();
+        for (int i = 0;i < numRows;i++) {
+            strs.add("");
+        }
+        int i = 0, r = 0;
+        boolean inc = false, dec = false;
+        String curr;
+        while (i < s.length()) {
+            curr = strs.get(r) + s.charAt(i);
+            strs.set(r, curr);
+            if (r == 0) {
+                inc = true;
+                dec = false;
+            } else if (r == numRows - 1) {
+                inc = false;
+                dec = true;
+            }
+            if (inc) {
+                r++;
+            }
+            if (dec) {
+                r--;
+            }
+            i++;
+        }
+        String ans = "";
+        for (String st : strs) {
+            ans += st;
+        }
+        return ans;
+    }
+}
