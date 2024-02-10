@@ -1,0 +1,54 @@
+class Solution {
+
+    public String lcsString(String s1, String s2, int m, int n, int[][] dp) {
+        if (m == 0 || n == 0) {
+            return "";
+        }
+        if (s1.charAt(m - 1) == s2.charAt(n-1)) {
+            return lcsString(s1, s2, m-1, n-1, dp) + s1.charAt(m-1);
+        }
+        if (dp[m-1][n] > dp[m][n-1]) {
+            return lcsString(s1, s2, m-1, n, dp);
+        } else {
+            return lcsString(s1, s2, m, n-1, dp);
+        }
+    }
+
+    public void lcs(String s1, String s2, int m, int n, int[][] dp) {
+        for (int i = 1;i <= m;i++) {
+            for (int j = 1;j <= n;j++) {
+                if (s1.charAt(i-1) == s2.charAt(j-1)) {
+                    dp[i][j] = dp[i-1][j-1] + 1;
+                } else {
+                    dp[i][j] = Math.max(dp[i-1][j], dp[i][j-1]);
+                }
+            }
+        }
+    }
+
+    public String shortestCommonSupersequence(String str1, String str2) {
+        int m = str1.length();
+        int n = str2.length();
+        int[][] dp = new int[m+1][n+1];
+        lcs(str1, str2, m, n, dp);
+        String lcsStr = lcsString(str1, str2, m, n, dp);
+        String ans = "";
+        int p1 = 0, p2 = 0;
+        for (int i = 0;i < lcsStr.length();i++) {
+            while (str1.charAt(p1) != lcsStr.charAt(i)) {
+                ans += str1.charAt(p1);
+                p1++;
+            }
+            while (str2.charAt(p2) != lcsStr.charAt(i)) {
+                ans += str2.charAt(p2);
+                p2++;
+            }
+            ans += lcsStr.charAt(i);
+            p1++;
+            p2++;
+        }
+        ans += str1.substring(p1);
+        ans += str2.substring(p2);
+        return ans;
+    }
+}
