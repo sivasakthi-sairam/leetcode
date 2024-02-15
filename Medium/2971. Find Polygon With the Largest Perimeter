@@ -1,0 +1,14 @@
+class Solution {
+    public long largestPerimeter(int[] nums) {
+        Arrays.sort(nums);
+        long ans = -1;
+        long curSum = 0;
+        for (int i : nums) {
+            if (curSum > i) {
+                ans = curSum + i;
+            }
+            curSum += i;
+        }
+        return ans;
+    }
+}
