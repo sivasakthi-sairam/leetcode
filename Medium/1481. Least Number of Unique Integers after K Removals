@@ -1,0 +1,34 @@
+class Solution {
+
+    class Node implements Comparable<Node> {
+        int num;
+        int freq;
+        public Node (int n, int f) {
+            num = n;
+            freq = f;
+        }
+
+        public int compareTo(Node that) {
+            return this.freq - that.freq;
+        }
+    }
+
+    public int findLeastNumOfUniqueInts(int[] arr, int k) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i : arr) {
+            map.put(i, map.getOrDefault(i, 0) + 1);
+        }
+        PriorityQueue<Node> minHeap = new PriorityQueue<>();
+        for (int i : map.keySet()) {
+            minHeap.add(new Node(i, map.get(i)));
+        }
+        for (int i = 0;i < k;i++) {
+            Node node = minHeap.remove();
+            node.freq--;
+            if (node.freq > 0) {
+                minHeap.add(node);
+            }
+        }
+        return minHeap.size();
+    }
+}
