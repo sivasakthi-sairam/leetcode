@@ -1,0 +1,66 @@
+class Solution {
+
+    class Node implements Comparable<Node> {
+        int room;
+        int start;
+        int end;
+        public Node (int r, int s, int e) {
+            room = r;
+            start = s;
+            end = e;
+        }
+        public int compareTo(Node that) {
+            if (this.end == that.end) {
+                return this.room - that.room;
+            }
+            return this.end - that.end;
+        }
+    }
+
+    public int mostBooked(int n, int[][] meetings) {
+        Arrays.sort(meetings, (a, b) -> {
+            return a[0] - b[0];
+        });
+        PriorityQueue<Node> usedRooms = new PriorityQueue<>();
+        PriorityQueue<Integer> vacant = new PriorityQueue<>();
+        int[] uses = new int[n];
+        for (int i = 0;i < n;i++) {
+            vacant.add(i);
+        }
+        int startT, endT, curRoom;
+        int exeT = 0, maxUse = 0;
+        for (int[] arr : meetings) {
+            startT = arr[0];
+            endT = arr[1];
+            if (usedRooms.size() > 0 && usedRooms.peek().end <= startT) {
+                while (usedRooms.size() > 0 && usedRooms.peek().end <= startT) {
+                    vacant.add(usedRooms.remove().room);
+                }
+                curRoom = vacant.remove();
+                uses[curRoom]++;
+                maxUse = Math.max(maxUse, uses[curRoom]);
+                usedRooms.add(new Node(curRoom, startT, endT));
+            } else {
+                if (vacant.size() > 0) {
+                    curRoom = vacant.remove();
+                    uses[curRoom]++;
+                    maxUse = Math.max(maxUse, uses[curRoom]);
+                    usedRooms.add(new Node(curRoom, startT, endT));
+                } else {
+                    exeT = usedRooms.peek().end;
+                    vacant.add(usedRooms.remove().room);
+                    curRoom = vacant.remove();
+                    uses[curRoom]++;
+                    maxUse = Math.max(maxUse, uses[curRoom]);
+                    usedRooms.add(new Node(curRoom, exeT, exeT + endT - startT));
+                }
+            }
+        }
+        for (int i = 0;i < n;i++) {
+            if (uses[i] == maxUse) {
+                return i;
+            }
+        }
+        return 0;
+    }
+}
