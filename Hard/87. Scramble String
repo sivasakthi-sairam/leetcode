@@ -1,0 +1,44 @@
+class Solution {
+    Map<String, Boolean> dpMap;
+
+    public boolean dpMemorisation(String s1, String s2) {
+        int n = s1.length();
+        if (n == 1) {
+            return s1.equals(s2);
+        }
+        if (s1.equals(s2)) {
+            return true;
+        }
+        String key = s1 + "*" + s2;
+        if (dpMap.containsKey(key)) {
+            return dpMap.get(key);
+        }
+        int[] freq1 = new int[26];
+        int[] freq2 = new int[26];
+        for (int i = 0;i < n;i++) {
+            freq1[s1.charAt(i) - 97]++;
+            freq2[s2.charAt(i) - 97]++;
+        }
+        for (int i = 0;i < 26;i++) {
+            if (freq1[i] != freq2[i]) {
+                dpMap.put(key, false);
+                return false;
+            }
+        }
+        for (int i = 1;i < n;i++) {
+            if ((dpMemorisation(s1.substring(0, i), s2.substring(0, i)) && dpMemorisation(s1.substring(i), s2.substring(i))) ||
+            (dpMemorisation(s1.substring(0, i), s2.substring(n - i)) && dpMemorisation(s1.substring(i), s2.substring(0, n-i)))) {
+                dpMap.put(key, true);
+                return true;
+            }
+        }
+        dpMap.put(key, false);
+        return false;
+    }
+
+    public boolean isScramble(String s1, String s2) {
+        dpMap = new HashMap<>();
+        boolean result = dpMemorisation(s1, s2);
+        return result;
+    }
+}
