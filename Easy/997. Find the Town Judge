@@ -1,0 +1,33 @@
+class Solution {
+    public int findJudge(int n, int[][] trust) {
+        int arrLen = trust.length;
+        if (n == 1) {
+            return 1;
+        }
+        Set<Integer> numSet = new HashSet<>();
+        for (int i = 0;i < arrLen;i++) {
+            numSet.add(trust[i][0]);
+        }
+        if (numSet.size() != n-1) {
+            return -1;
+        }
+        int curSum = 0;
+        for (int i : numSet) {
+            curSum += i;
+        }
+        int totalSum = (n * (n + 1)) / 2;
+        int judge = totalSum - curSum;
+        boolean[] isTrust = new boolean[n+1];
+        for (int i = 0;i < arrLen;i++) {
+            if (trust[i][1] == judge) {
+                isTrust[trust[i][0]] = true;
+            }
+        }
+        for (int i = 1;i <= n;i++) {
+            if (!isTrust[i] && i != judge) {
+                return -1;
+            }
+        }
+        return judge;
+    }
+}
