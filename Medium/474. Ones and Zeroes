@@ -1,0 +1,37 @@
+class Solution {
+    Map<String, Integer> dpMap;
+
+    public int dpMemorisation(String[] strs, int index, int ones, int zeros) {
+        if (index >= strs.length) {
+            return 0;
+        }
+        if (ones == 0 && zeros == 0) {
+            return 0;
+        }
+        String key = index + "*" + ones + "*" + zeros;
+        if (dpMap.containsKey(key)) {
+            return dpMap.get(key);
+        }
+        int curOnes = 0, curZeros = 0;
+        for (int i = 0;i < strs[index].length();i++) {
+            if (strs[index].charAt(i) == '0') {
+                curZeros++;
+            } else {
+                curOnes++;
+            }
+        }
+        int ans = 0;
+        if (curZeros <= zeros && curOnes <= ones) {
+            ans = Math.max(dpMemorisation(strs, index + 1, ones, zeros), 1 + dpMemorisation(strs, index + 1, ones - curOnes, zeros - curZeros));
+        } else {
+            ans = dpMemorisation(strs, index + 1, ones, zeros);
+        }
+        dpMap.put(key, ans);
+        return ans;
+    }
+
+    public int findMaxForm(String[] strs, int m, int n) {
+        dpMap = new HashMap<>();
+        return dpMemorisation(strs, 0, n, m);
+    }
+}
