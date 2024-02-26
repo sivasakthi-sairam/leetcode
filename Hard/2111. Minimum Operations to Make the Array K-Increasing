@@ -1,0 +1,45 @@
+class Solution {
+    public int findNextGreaterElement(List<Integer> lis, int n) {
+        int left = 0, right = lis.size() - 1;
+        while (left < right) {
+            int mid = (left + right) / 2;
+            if (n >= lis.get(mid)) {
+                left = mid + 1;
+            } else {
+                right = mid;
+            }
+        }
+        return left;
+    }
+
+    public int findLIS(List<Integer> list) {
+        List<Integer> lis = new ArrayList<>();
+        lis.add(list.get(0));
+        for (int i = 1;i < list.size();i++) {
+            int lastItem = lis.get(lis.size() - 1);
+            if (list.get(i) >= lastItem) {
+                lis.add(list.get(i));
+            } else {
+                int index = findNextGreaterElement(lis, list.get(i));
+                lis.set(index, list.get(i));
+            }
+        }
+        return lis.size();
+    }
+
+    public int kIncreasing(int[] arr, int k) {
+        int n = arr.length;
+        int ans = 0;
+        for (int i = 0;i < k;i++) {
+            List<Integer> list = new ArrayList<>();
+            int j = i;
+            while (j < n) {
+                list.add(arr[j]);
+                j += k;
+            }
+            int lis = findLIS(list);
+            ans += list.size() - lis;
+        }
+        return ans;
+    }
+}
