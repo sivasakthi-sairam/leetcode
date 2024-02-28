@@ -1,0 +1,38 @@
+class Solution {
+    int[] nums;
+    int target;
+
+    public boolean backtracking(boolean[] used, int index, int k, int subsetSum) {
+        if (k == 0) {
+            return true;
+        }
+        if (subsetSum == target) {
+            return backtracking(used, 0, k-1, 0);
+        }
+        for (int i = index;i < nums.length;i++) {
+            if (used[i] || (subsetSum + nums[i]) > target) {
+                continue;
+            }
+            used[i] = true;
+            if (backtracking(used, i+1, k, subsetSum + nums[i])) {
+                return true;
+            }
+            used[i] = false;
+        }
+        return false;
+    }
+
+    public boolean canPartitionKSubsets(int[] arr, int k) {
+        nums = arr;
+        int sum = 0;
+        for (int i : nums) {
+            sum += i;
+        }
+        if (sum % k != 0) {
+            return false;
+        }
+        target = sum / k;
+        boolean[] used = new boolean[arr.length];
+        return backtracking(used, 0, k, 0);
+    }
+}
