@@ -1,0 +1,63 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public boolean isEvenOddTree(TreeNode root) {
+        if (root == null) {
+            return true;
+        }
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        int i = 0;
+        int size, j;
+        TreeNode curr;
+        List<Integer> level = new ArrayList<>();
+        while (queue.size() > 0) {
+            size = queue.size();
+            for (j = 0;j < size;j++) {
+                curr = queue.remove();
+                level.add(curr.val);
+                if (curr.left != null) {
+                    queue.add(curr.left);
+                }
+                if (curr.right != null) {
+                    queue.add(curr.right);
+                }
+            }
+            if (i%2 == 0) {
+                if (level.get(0) % 2 == 0) {
+                    return false;
+                }
+                for (j = 1;j < level.size();j++) {
+                    if (level.get(j) % 2 == 0 || level.get(j) <= level.get(j-1)) {
+                        return false;
+                    }
+                }
+            } else {
+                if (level.get(0) % 2 == 1) {
+                    return false;
+                }
+                for (j = 1;j < level.size();j++) {
+                    if (level.get(j) % 2 == 1 || level.get(j) >= level.get(j-1)) {
+                        return false;
+                    }
+                }
+            }
+            level.clear();
+            i++;
+        }
+        return true;
+    }
+}
