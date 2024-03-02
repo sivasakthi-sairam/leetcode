@@ -1,0 +1,41 @@
+class Solution {
+    Integer[][] dp;
+    int maxMask;
+    int mod = (int)1e9+7;
+
+    public int memorisation(int hat, int mask, Map<Integer, List<Integer>> hatToPeople) {
+        if (mask == maxMask) {
+            return 1;
+        }
+        if (hat > 40) {
+            return 0;
+        }
+        if (dp[hat][mask] != null) {
+            return dp[hat][mask];
+        }
+        dp[hat][mask] = memorisation(hat+1, mask, hatToPeople);
+        for (int person : hatToPeople.get(hat)) {
+            if ( (1<<person & mask) > 0) {
+                continue;
+            }
+            dp[hat][mask] += memorisation(hat+1, 1<<person | mask, hatToPeople);
+            dp[hat][mask] %= mod;
+        }
+        return dp[hat][mask];
+    }
+
+    public int numberWays(List<List<Integer>> hats) {
+        maxMask = (int)Math.pow(2, hats.size())-1;
+        dp = new Integer[41][maxMask];
+        Map<Integer, List<Integer>> hatToPeople = new HashMap<>();
+        for (int i = 0; i <= 40; i++) {
+            hatToPeople.put(i, new ArrayList<>());
+        }
+        for (int i = 0; i < hats.size(); i++) {
+            for (int j : hats.get(i)) {
+                hatToPeople.get(j).add(i);
+            }
+        }
+        return memorisation(0, 0, hatToPeople);
+    }
+}
