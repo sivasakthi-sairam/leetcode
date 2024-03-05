@@ -1,0 +1,26 @@
+class Solution {
+    public int minimumLength(String s) {
+        int l = 0, r = s.length() - 1;
+        int subL, subR;
+        while (l < r) {
+            subL = l;
+            subR = r;
+            while (subL < subR && s.charAt(subL) == s.charAt(subL+1)) {
+                subL++;
+            }
+            if (subL == subR) {
+                return 0;
+            }
+            while (s.charAt(subR) == s.charAt(subR - 1)) {
+                subR--;
+            }
+            if (s.charAt(subL) == s.charAt(subR)) {
+                l = subL + 1;
+                r = subR - 1;
+            } else {
+                return (r - l + 1);
+            }
+        }
+        return 1;
+    }
+}
