@@ -1,0 +1,28 @@
+class Solution {
+    public int getCommon(int[] nums1, int[] nums2) {
+        int p1 = 0, p2 = 0;
+        int minCommon = Integer.MAX_VALUE;
+        boolean found = false;
+        while (p1 < nums1.length && p2 < nums2.length) {
+            while (p1 < nums1.length && nums1[p1] < nums2[p2]) {
+                p1++;
+            }
+            if (p1 == nums1.length) {
+                break;
+            }
+            if (nums1[p1] == nums2[p2]) {
+                found = true;
+                minCommon = Math.min(minCommon, nums1[p1]);
+                p1++;
+                p2++;
+            } else {
+                p2++;
+            }
+        }
+        if (found) {
+            return minCommon;
+        } else {
+            return -1;
+        }
+    }
+}
