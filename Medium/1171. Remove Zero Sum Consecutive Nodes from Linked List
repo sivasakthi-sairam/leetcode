@@ -1,0 +1,70 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode removeZeroSumSublists(ListNode head) {
+        if (head == null) {
+            return null;
+        }
+        ListNode copy = head;
+        int prefixSum = 0;
+        int zeroIndex = -1;
+        int index = 0;
+        List<Integer> sumList = new ArrayList<>();
+        while (copy != null) {
+            prefixSum += copy.val;
+            sumList.add(prefixSum);
+            if (prefixSum == 0) {
+                zeroIndex = index;
+            }
+            index++;
+            copy = copy.next;
+        }
+        boolean[] skip = new boolean[index];
+        int i = 0;
+        while (i <= zeroIndex) {
+            skip[i] = true;
+            i++;
+        }
+        int j;
+        while (i < sumList.size()) {
+            j = sumList.lastIndexOf(sumList.get(i));
+            if (i != j) {
+                i++;
+                while (i <= j) {
+                    skip[i] = true;
+                    i++;
+                }
+            } else {
+                i++;
+            }
+        }
+        ListNode start = new ListNode();
+        ListNode startCopy = start;
+        boolean found = false;
+        for (i = 0;i < index;i++) {
+            if(skip[i]) {
+                head = head.next;
+            } else {
+                if (found) {
+                    start.next = head;
+                    start = start.next;
+                } else {
+                    found = true;
+                    start.next = head;
+                    start = start.next;
+                }
+                head = head.next;
+            }
+        }
+        start.next = null;
+        return startCopy.next;
+    }
+}
