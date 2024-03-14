@@ -1,0 +1,52 @@
+class Solution {
+    public int numSubarraysWithSum(int[] nums, int goal) {
+        if (goal == 0) {
+            int curZeros = 0;
+            int ans = 0;
+            for (int i = 0;i < nums.length;i++) {
+                if (nums[i] == 0) {
+                    curZeros++;
+                } else {
+                    ans += ((curZeros * (curZeros + 1)) / 2);
+                    curZeros = 0;
+                }
+            }
+            ans += ((curZeros * (curZeros + 1)) / 2);
+            return ans;
+        }
+        int preZeros = 0;
+        int postZeros = 0;
+        int curSum = 0;
+        int ans = 0;
+        int l = 0, r = 0;
+        int tempL, tempR;
+        while (r < nums.length) {
+            while (r < nums.length && curSum + nums[r] <= goal) {
+                curSum += nums[r];
+                r++;
+            }
+            if (curSum < goal) {
+                return ans;
+            }
+            ans++;
+            tempL = l;
+            preZeros = 0;
+            while (nums[tempL] == 0) {
+                preZeros++;
+                tempL++;
+            }
+            tempR = r - 1;
+            postZeros = 0;
+            while (nums[tempR] == 0) {
+                postZeros++;
+                tempR--;
+            }
+            ans += preZeros;
+            ans += postZeros;
+            ans += (preZeros * postZeros);
+            l = tempL + 1;
+            curSum--;
+        }
+        return ans;
+    }
+}
