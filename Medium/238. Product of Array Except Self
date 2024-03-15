@@ -1,0 +1,31 @@
+class Solution {
+    public int[] productExceptSelf(int[] nums) {
+        int n = nums.length;
+        int[] forward = new int[n];
+        int[] backward = new int[n];
+        int initForward = 1;
+        int initBackward = 1;
+        int i, j;
+        for (i = 0;i < n;i++) {
+            initForward *= nums[i];
+            forward[i] = initForward;
+            j = n - i - 1;
+            initBackward *= nums[j];
+            backward[j] = initBackward;
+        }
+        int[] ans = new int[n];
+        int prefix, suffix;
+        for (i = 0;i < n;i++) {
+            prefix = 1;
+            if (i - 1 >= 0) {
+                prefix = forward[i-1];
+            }
+            suffix = 1;
+            if (i + 1 < n) {
+                suffix = backward[i + 1];
+            }
+            ans[i] = prefix * suffix;
+        }
+        return ans;
+    }
+}
