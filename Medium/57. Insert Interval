@@ -1,0 +1,52 @@
+class Solution {
+    public int[][] insert(int[][] intervals, int[] newInterval) {
+        List<List<Integer>> temp = new ArrayList<>();
+        int i = 0;
+        while (i < intervals.length) {
+            if (newInterval[1] < intervals[i][0]) {
+                temp.add(Arrays.asList(newInterval[0], newInterval[1]));
+                while (i < intervals.length) {
+                    temp.add(Arrays.asList(intervals[i][0], intervals[i][1]));
+                    i++;
+                }
+            } else {
+                while (i < intervals.length && intervals[i][1] < newInterval[0]) {
+                    temp.add(Arrays.asList(intervals[i][0], intervals[i][1]));
+                    i++;
+                }
+                if (i < intervals.length) {
+                    int tempStart = Math.min(intervals[i][0], newInterval[0]);
+                    while (i < intervals.length && intervals[i][0] < newInterval[1] && intervals[i][1] < newInterval[1]) {
+                        i++;
+                    }
+                    if (i < intervals.length) {
+                        if (intervals[i][0] > newInterval[1]) {
+                            temp.add(Arrays.asList(tempStart, newInterval[1]));
+                        } else {
+                            temp.add(Arrays.asList(tempStart, intervals[i][1]));
+                            i++;
+                        }
+                        while (i < intervals.length) {
+                            temp.add(Arrays.asList(intervals[i][0], intervals[i][1]));
+                            i++;
+                        }
+                    } else {
+                        temp.add(Arrays.asList(tempStart, newInterval[1]));
+                        break;
+                    }
+                } else {
+                    temp.add(Arrays.asList(newInterval[0], newInterval[1]));
+                }
+            }
+        }
+        if (temp.size() == 0) {
+            temp.add(Arrays.asList(newInterval[0], newInterval[1]));
+        }
+        int[][] ans = new int[temp.size()][2];
+        for (i = 0;i < temp.size();i++) {
+            ans[i][0] = temp.get(i).get(0);
+            ans[i][1] = temp.get(i).get(1);
+        }
+        return ans;
+    }
+}
