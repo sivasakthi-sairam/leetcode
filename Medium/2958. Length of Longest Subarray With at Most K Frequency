@@ -1,0 +1,26 @@
+class Solution {
+    public int maxSubarrayLength(int[] nums, int k) {
+        Map<Integer, Integer> freqMap = new HashMap<>();
+        int n = nums.length;
+        int l = 0, r = 0;
+        int cur;
+        int ans = 0;
+        while (r < n) {
+            cur = nums[r];
+            freqMap.put(cur, freqMap.getOrDefault(cur, 0) + 1);
+            if (freqMap.get(cur) <= k) {
+                ans = Math.max(ans, r - l + 1);
+            } else {
+                while (nums[l] != cur) {
+                    freqMap.put(nums[l], freqMap.get(nums[l]) - 1);
+                    l++;
+                }
+                l++;
+                freqMap.put(cur, k);
+                ans = Math.max(ans, r - l + 1);
+            }
+            r++;
+        }
+        return ans;
+    }
+}
