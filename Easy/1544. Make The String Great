@@ -1,0 +1,20 @@
+class Solution {
+    public String makeGood(String s) {
+        String ans = s.charAt(0) + "";
+        char last, cur;
+        for (int i = 1;i < s.length();i++) {
+            cur = s.charAt(i);
+            if (ans.length() == 0) {
+                ans += cur;
+                continue;
+            }
+            last = ans.charAt(ans.length() - 1);
+            if (Math.abs(cur - last) == 32) {
+                ans = ans.substring(0, ans.length() - 1);
+            } else {
+                ans += cur;
+            }
+        }
+        return ans;
+    }
+}
