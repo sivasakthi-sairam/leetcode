@@ -1,0 +1,38 @@
+class Solution {
+    public String minRemoveToMakeValid(String s) {
+        String ans1 = "";
+        int curNest = 0;
+        char cur;
+        for (int i = 0;i < s.length();i++) {
+            cur = s.charAt(i);
+            if (cur == '(') {
+                ans1 += cur;
+                curNest++;
+            } else if (cur == ')') {
+                if (curNest > 0) {
+                    ans1 += cur;
+                    curNest--;
+                }
+            } else {
+                ans1 += cur;
+            }
+        }
+        if (curNest == 0) {
+            return ans1;
+        }
+        String ans2 = "";
+        for (int i = ans1.length() - 1;i >= 0;i--) {
+            cur = ans1.charAt(i);
+            if (cur == '(') {
+                curNest--;
+                if (curNest == 0) {
+                    ans2 = ans1.substring(0, i) + ans2;
+                    return ans2;
+                }
+            } else {
+                ans2 = cur + ans2;
+            }
+        }
+        return ans2;
+    }
+}
