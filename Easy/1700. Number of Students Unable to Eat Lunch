@@ -1,0 +1,19 @@
+class Solution {
+    public int countStudents(int[] students, int[] sandwiches) {
+        Arrays.sort(students);
+        int n = students.length;
+        int cur;
+        int l = 0, r = n-1;
+        for (int i = 0;i < n;i++) {
+            cur = sandwiches[i];
+            if (students[l] == cur) {
+                l++;
+            } else if (students[r] == cur) {
+                r--;
+            } else {
+                return (r - l + 1);
+            }
+        }
+        return 0;
+    }
+}
