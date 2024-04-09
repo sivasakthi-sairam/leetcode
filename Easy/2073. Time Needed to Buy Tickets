@@ -1,0 +1,19 @@
+class Solution {
+    public int timeRequiredToBuy(int[] tickets, int k) {
+        int n = tickets.length;
+        int num = tickets[k];
+        int time = num * n;
+        for (int i = 0;i < k;i++) {
+            if (tickets[i] < num) {
+                time -= num - tickets[i];
+            }
+        }
+        for (int i = k + 1;i < n;i++) {
+            if (tickets[i] < num - 1) {
+                time -= num - 1 - tickets[i];
+            }
+            time--;
+        }
+        return time;
+    }
+}
