@@ -1,0 +1,28 @@
+class Solution {
+    public int[] deckRevealedIncreasing(int[] deck) {
+        Arrays.sort(deck);
+        int n = deck.length;
+        int[] result = new int[n];
+        boolean[] visited = new boolean[n];
+        int count = 0;
+        int idx = 0;
+        int p = 0;
+        int freeIndex = 0;
+        while (true) {
+            if (!visited[p]) {
+                freeIndex++;
+                if (freeIndex % 2 == 1) {
+                    result[p] = deck[idx];
+                    idx++;
+                    if (idx == n) {
+                        break;
+                    }
+                    visited[p] = true;
+                }
+            }
+            p++;
+            p %= n;
+        }
+        return result;
+    }
+}
