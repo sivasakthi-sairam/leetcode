@@ -1,0 +1,36 @@
+class Solution {
+
+    public boolean isSafe(int r, int c, int R, int C) {
+        if (r >= 0 && r < R && c >= 0 && c < C) {
+            return true;
+        }
+        return false;
+    }
+
+    public int islandPerimeter(int[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+        int[] dir = new int[]{-1, 0, 1, 0, -1};
+        int perimeter = 0;
+        int curR, curC;
+        for (int i = 0;i < m;i++) {
+            for (int j = 0;j < n;j++) {
+                if (grid[i][j] == 0) {
+                    continue;
+                }
+                for (int k = 0;k < 4;k++) {
+                    curR = i + dir[k];
+                    curC = j + dir[k+1];
+                    if (isSafe(curR, curC, m, n)) {
+                        if (grid[curR][curC] == 0) {
+                            perimeter++;
+                        }
+                    } else {
+                        perimeter++;
+                    }
+                }
+            }
+        }
+        return perimeter;
+    }
+}
