@@ -1,0 +1,40 @@
+class Solution {
+
+    public boolean isSafe(int r, int c, int R, int C) {
+        if (r >= 0 && r < R && c >= 0 && c < C) {
+            return true;
+        }
+        return false;
+    }
+
+    public void visitIsland(int row, int col, char[][] grid, boolean[][] visited) {
+        visited[row][col] = true;
+        int m = grid.length;
+        int n = grid[0].length;
+        int[] dir = new int[]{-1, 0, 1, 0, -1};
+        int r, c;
+        for (int i = 0;i < 4;i++) {
+            r = row + dir[i];
+            c = col + dir[i+1];
+            if (isSafe(r, c, m, n) && grid[r][c] == '1' && !visited[r][c]) {
+                visitIsland(r, c, grid, visited);
+            }
+        }
+    }
+
+    public int numIslands(char[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+        boolean[][] visited = new boolean[m][n];
+        int count = 0;
+        for (int i = 0;i < m;i++) {
+            for (int j = 0;j < n;j++) {
+                if (grid[i][j] == '1' && !visited[i][j]) {
+                    count++;
+                    visitIsland(i, j, grid, visited);
+                }
+            }
+        }
+        return count;
+    }
+}
