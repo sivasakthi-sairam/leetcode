@@ -1,0 +1,39 @@
+class Solution {
+    public int[][] findFarmland(int[][] land) {
+        int m = land.length;
+        int n = land[0].length;
+        boolean[][] visited = new boolean[m][n];
+        List<List<Integer>> bigList = new ArrayList<>();
+        int startR, endR, startC, endC, k, l;
+        for (int i = 0;i < m;i++) {
+            for (int j = 0;j < n;j++) {
+                if (land[i][j] == 1 && !visited[i][j]) {
+                    startR = i;
+                    startC = j;
+                    k = i;
+                    l = j;
+                    while (k < m && land[k][startC] == 1) {
+                        l = startC;
+                        while (l < n && land[k][l] == 1) {
+                            visited[k][l] = true;
+                            l++;
+                        }
+                        k++;
+                    }
+                    endR = k - 1;
+                    endC = l - 1;
+                    List<Integer> farm = new ArrayList<>();
+                    Collections.addAll(farm, startR, startC, endR, endC);
+                    bigList.add(farm);
+                }
+            }
+        }
+        int[][] result = new int[bigList.size()][4];
+        for (int i = 0;i < bigList.size();i++) {
+            for (int j = 0;j < 4;j++) {
+                result[i][j] = bigList.get(i).get(j);
+            }
+        }
+        return result;
+    }
+}
