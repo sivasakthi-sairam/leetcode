@@ -1,0 +1,28 @@
+class Solution {
+
+    Map<String, Integer> dpMap;
+
+    public int memorisation(String ring, String key, int ringStart, int keyIdx) {
+        if (keyIdx == key.length()) {
+            return 0;
+        }
+        String k = ringStart + "*" + keyIdx;
+        if (dpMap.containsKey(k)) {
+            return dpMap.get(k);
+        }
+        int result = Integer.MAX_VALUE;
+        for (int i = 0;i < ring.length();i++) {
+            if (ring.charAt(i) == key.charAt(keyIdx)) {
+                int min_dist = Math.min(Math.abs(ringStart - i), ring.length() - Math.abs(ringStart - i));
+                result = Math.min(result, min_dist + 1 + memorisation(ring, key, i, keyIdx + 1));
+            }
+        }
+        dpMap.put(k, result);
+        return result;
+    }
+
+    public int findRotateSteps(String ring, String key) {
+        dpMap = new HashMap<>();
+        return memorisation(ring, key, 0, 0);
+    }
+}
