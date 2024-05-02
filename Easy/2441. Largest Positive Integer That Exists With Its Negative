@@ -1,0 +1,22 @@
+class Solution {
+    public int findMaxK(int[] nums) {
+        Arrays.sort(nums);
+        int l = 0, r = nums.length - 1;
+        int ans = -1;
+        while (l < r) {
+            if (nums[l] > 0 && nums[r] > 0) {
+                break;
+            }
+            if (Math.abs(nums[l]) > nums[r]) {
+                l++;
+            } else if (nums[r] > Math.abs(nums[l])) {
+                r--;
+            } else if (nums[r] == Math.abs(nums[l])) {
+                ans = Math.max(nums[r], ans);
+                l++;
+                r--;
+            }
+        }
+        return ans;
+    }
+}
