@@ -1,0 +1,37 @@
+class Solution {
+
+    class Node implements Comparable<Node> {
+        int val, idx;
+        public Node (int v, int i) {
+            val = v;
+            idx = i;
+        }
+
+        public int compareTo(Node other) {
+            return other.val - this.val;
+        }
+    }
+
+    public String[] findRelativeRanks(int[] score) {
+        PriorityQueue<Node> maxHeap = new PriorityQueue<>();
+        for (int i = 0;i < score.length;i++) {
+            maxHeap.add(new Node(score[i], i));
+        }
+        int pos = 1;
+        String cur;
+        Node temp;
+        String[] medals = new String[]{"Gold Medal","Silver Medal","Bronze Medal"};
+        String[] result = new String[score.length];
+        while (maxHeap.size() > 0) {
+            temp = maxHeap.remove();
+            if (pos <= 3) {
+                cur = medals[pos - 1];
+            } else {
+                cur = String.valueOf(pos);
+            }
+            pos++;
+            result[temp.idx] = cur;
+        }
+        return result;
+    }
+}
