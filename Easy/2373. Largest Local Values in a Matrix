@@ -1,0 +1,17 @@
+class Solution {
+    public int[][] largestLocal(int[][] grid) {
+        int n = grid.length;
+        int resDim = 1 + (n - 3);
+        int[][] result = new int[resDim][resDim];
+        for (int i = 0;i < resDim;i++) {
+            for (int j = 0;j < resDim;j++) {
+                for (int k = 0;k < 3;k++) {
+                    for (int l = 0;l < 3;l++) {
+                        result[i][j] = Math.max(result[i][j], grid[i+k][j+l]);
+                    }
+                }
+            }
+        }
+        return result;
+    }
+}
