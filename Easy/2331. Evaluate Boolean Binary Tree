@@ -1,0 +1,37 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+
+    public int postOrder(TreeNode node) {
+        if (node.val <= 1) {
+            return node.val;
+        }
+        int left = (node.left == null) ? 1 : postOrder(node.left);
+        int right = (node.right == null) ? 1 : postOrder(node.right);
+        if (node.val == 2) {
+            return (left | right);
+        }
+        return (left & right);
+    }
+
+    public boolean evaluateTree(TreeNode root) {
+        int result = postOrder(root);
+        if (result == 1) {
+            return true;
+        }
+        return false;
+    }
+}
