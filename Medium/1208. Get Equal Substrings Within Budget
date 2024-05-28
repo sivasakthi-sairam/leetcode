@@ -1,0 +1,18 @@
+class Solution {
+    public int equalSubstring(String s, String t, int maxCost) {
+        int l = 0, r = 0, n = s.length();
+        int curCost = 0, cost;
+        int ans = 0;
+        while (r < n) {
+            cost = Math.abs(s.charAt(r) - t.charAt(r));
+            curCost += cost;
+            while (curCost > maxCost && l <= r) {
+                curCost -= Math.abs(s.charAt(l) - t.charAt(l));
+                l++;
+            }
+            ans = Math.max(ans, (r - l + 1));
+            r++;
+        }
+        return ans;
+    }
+}
