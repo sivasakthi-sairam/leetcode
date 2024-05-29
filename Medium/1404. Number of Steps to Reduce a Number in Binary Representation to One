@@ -1,0 +1,37 @@
+class Solution {
+    public int numSteps(String s) {
+        int n = s.length();
+        int start = 0, end = n - 1;
+        while (start < n && s.charAt(start) == '0') {
+            start++;
+        }
+        if (start == n) {
+            return 1;
+        }
+        int temp, result = 0;
+        while (start < end) {
+            if (s.charAt(end) == '0') {
+                end--;
+            } else {
+                temp = end - 1;
+                while (temp > start && s.charAt(temp) == '1') {
+                    temp--;
+                }
+                if (temp == start) {
+                    if (start == 0) {
+                        s = "1" + ("0").repeat(end - start + 1);
+                        start = 0;
+                        end++;
+                    } else {
+                        s = s.substring(0, start - 1) + "1" + "0".repeat(end - temp + 1);
+                        start--;
+                    }
+                } else {
+                    s = s.substring(0, temp) + "1" + "0".repeat(end - temp);
+                }
+            }
+            result++;
+        }
+        return result;
+    }
+}
