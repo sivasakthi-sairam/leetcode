@@ -1,0 +1,29 @@
+class Solution {
+    public List<String> commonChars(String[] words) {
+        int[] ascii = new int[26];
+        int[] temp = new int[26];
+        for (int i = 0;i < words.length;i++) {
+            for (int j = 0;j < words[i].length();j++) {
+                if (i == 0) {
+                    ascii[words[i].charAt(j) - 'a']++;
+                } else {
+                    temp[words[i].charAt(j) - 'a']++;
+                }
+            }
+            if (i > 0) {
+                for (int j = 0;j < 26;j++) {
+                    ascii[j] = Math.min(ascii[j], temp[j]);
+                    temp[j] = 0;
+                }
+            }
+        }
+        List<String> result = new ArrayList<>();
+        for (int i = 0;i < 26;i++) {
+            while (ascii[i] > 0) {
+                result.add("" + (char) (97 + i));
+                ascii[i]--;
+            }
+        }
+        return result;
+    }
+}
