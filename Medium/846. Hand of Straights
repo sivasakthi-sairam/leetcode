@@ -1,0 +1,60 @@
+class Solution {
+
+    class Node {
+        int num, freq;
+        public Node (int n, int f) {
+            num = n;
+            freq = f;
+        }
+    }
+
+    public boolean isNStraightHand(int[] hand, int groupSize) {
+        int n = hand.length;
+        if (n % groupSize != 0) {
+            return false;
+        }
+        if (groupSize == 1) {
+            return true;
+        }
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i : hand) {
+            map.put(i, map.getOrDefault(i, 0) + 1);
+        }
+        PriorityQueue<Node> minHeap = new PriorityQueue<>(Comparator.comparingInt(o -> o.num));
+        for (int i : map.keySet()) {
+            minHeap.add(new Node(i, map.get(i)));
+        }
+        Stack<Node> tempStack = new Stack<>();
+        int prev;
+        Node cur;
+        for (int i = 0;i < n/groupSize;i++) {
+            if (minHeap.size() == 0) {
+                return false;
+            }
+            cur = minHeap.remove();
+            prev = cur.num;
+            cur.freq--;
+            if (cur.freq > 0) {
+                tempStack.push(cur);
+            }
+            for (int j = 1;j < groupSize;j++) {
+                if (minHeap.size() == 0) {
+                    return false;
+                }
+                cur = minHeap.remove();
+                if (cur.num - prev != 1) {
+                    return false;
+                }
+                prev = cur.num;
+                cur.freq--;
+                if (cur.freq > 0) {
+                    tempStack.push(cur);
+                }
+            }
+            while(!tempStack.empty()) {
+                minHeap.add(tempStack.pop());
+            }
+        }
+        return true;
+    }
+}
