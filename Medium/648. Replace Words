@@ -1,0 +1,72 @@
+class Solution {
+
+    class Node {
+        boolean endsHere;
+        Node[] children;
+        public Node () {
+            children = new Node[26];
+            endsHere = false;
+        }
+    }
+
+    public void insertWord(Node root, String word) {
+        char c;
+        Node node = root;
+        for (int i = 0;i < word.length();i++) {
+            c = word.charAt(i);
+            if (node.children[c - 'a'] == null) {
+                node.children[c - 'a'] = new Node();
+            }
+            node = node.children[c - 'a'];
+        }
+        node.endsHere = true;
+    }
+
+    public String replaceWords(List<String> dictionary, String sentence) {
+        Node root = new Node();
+        for (String word : dictionary) {
+            insertWord(root, word);
+        }
+        String temp;
+        int i = 0, n = sentence.length();
+        Node node;
+        boolean foundInTrie;
+        char c;
+        String result = "";
+        while (i < n) {
+            node = root;
+            foundInTrie = false;
+            temp = "";
+            while (i < n && sentence.charAt(i) != ' ') {
+                c = sentence.charAt(i);
+                if (node.children[c - 'a'] == null) {
+                    break;
+                }
+                temp += c;
+                if (node.children[c - 'a'].endsHere) {
+                    foundInTrie = true;
+                    break;
+                }
+                node = node.children[c - 'a'];
+                i++;
+            }
+            if (foundInTrie) {
+                result += temp;
+                while (i < n && sentence.charAt(i) != ' ') {
+                    i++;
+                }
+            } else {
+                while (i < n && sentence.charAt(i) != ' ') {
+                    temp += sentence.charAt(i);
+                    i++;
+                }
+                result += temp;
+            }
+            if (i < n) {
+                result += " ";
+                i++;
+            }
+        }
+        return result;
+    }
+}
