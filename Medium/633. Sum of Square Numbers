@@ -1,0 +1,15 @@
+class Solution {
+    public boolean judgeSquareSum(int c) {
+        long req = c;
+        long num1, num2, sqrt;
+        for (long i = 0;(i * i) <= req;i++) {
+            num1 = i * i;
+            num2 = c - num1;
+            sqrt = (long) Math.sqrt(num2);
+            if (sqrt * sqrt == num2) {
+                return true;
+            }
+        }
+        return false;
+    }
+}
