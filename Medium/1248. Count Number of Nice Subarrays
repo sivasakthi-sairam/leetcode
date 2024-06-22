@@ -1,0 +1,31 @@
+class Solution {
+    public int numberOfSubarrays(int[] nums, int k) {
+        List<Integer> indices = new ArrayList<>();
+        for (int i = 0;i < nums.length;i++) {
+            if (nums[i] % 2 == 1) {
+                indices.add(i);
+            }
+        }
+        if (indices.size() < k) {
+            return 0;
+        }
+        int prevFirst, nextLast, result = 0;
+        for (int i = k - 1;i < indices.size();i++) {
+            if (i - k < 0) {
+                prevFirst = indices.get(i - k + 1);
+            } else {
+                prevFirst = indices.get(i - k + 1) - indices.get(i - k) - 1;
+            }
+            if (i + 1 < indices.size()) {
+                nextLast = indices.get(i + 1) - indices.get(i) - 1;
+            } else {
+                nextLast = nums.length - indices.get(i) - 1;
+            }
+            result += prevFirst;
+            result += nextLast;
+            result += (prevFirst * nextLast);
+            result++;
+        }
+        return result;
+    }
+}
