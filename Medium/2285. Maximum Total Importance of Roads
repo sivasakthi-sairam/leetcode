@@ -1,0 +1,45 @@
+class Solution {
+
+    class Node implements Comparable<Node> {
+        int v, wt;
+        public Node(int a, int b) {
+            v = a;
+            wt = b;
+        }
+
+        public int compareTo(Node other) {
+            return other.wt - this.wt;
+        }
+    }
+
+    public long maximumImportance(int n, int[][] roads) {
+        int[] degree = new int[n];
+        for (int[] edge : roads) {
+            degree[edge[0]]++;
+            degree[edge[1]]++;
+        }
+        int[] values = new int[n];
+        int val = n;
+        PriorityQueue<Node> maxHeap = new PriorityQueue<>();
+        for (int i = 0;i < n;i++) {
+            if (degree[i] > 0) {
+                maxHeap.add(new Node(i, degree[i]));
+            }
+        }
+        Node cur;
+        while (maxHeap.size() > 0 && val > 0) {
+            cur = maxHeap.remove();
+            if (values[cur.v] > 0) {
+                continue;
+            }
+            values[cur.v] = val;
+            val--;
+        }
+        long ans = 0;
+        for (int[] edge : roads) {
+            ans += values[edge[0]];
+            ans += values[edge[1]];
+        }
+        return ans;
+    }
+}
