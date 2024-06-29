@@ -1,0 +1,33 @@
+class Solution {
+
+    public TreeSet<Integer> dfs (int node, Map<Integer, TreeSet<Integer>> map, List<List<Integer>> adjList) {
+        if (!map.containsKey(node)) {
+            TreeSet<Integer> set = new TreeSet<>();
+            map.put(node, set);
+            for (int parent : adjList.get(node)) {
+                map.get(node).add(parent);
+                map.get(node).addAll(dfs (parent, map, adjList));
+            }
+        }
+        return map.get(node);
+    }
+
+    public List<List<Integer>> getAncestors(int n, int[][] edges) {
+        List<List<Integer>> adjList = new ArrayList<>();
+        for (int i = 0;i < n;i++) {
+            adjList.add(new ArrayList<>());
+        }
+        for (int[] edge : edges) {
+            adjList.get(edge[1]).add(edge[0]);
+        }
+        Map<Integer, TreeSet<Integer>> map = new HashMap<>();
+        for (int i = 0;i < n;i++) {
+            dfs(i, map, adjList);
+        }
+        List<List<Integer>> result = new ArrayList<>();
+        for (int i = 0;i < n;i++) {
+            result.add(new ArrayList<>(map.get(i)));
+        }
+        return result;
+    }
+}
