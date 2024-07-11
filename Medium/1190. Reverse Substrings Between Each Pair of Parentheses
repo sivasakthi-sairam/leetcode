@@ -1,0 +1,41 @@
+class Solution {
+    public String reverseParentheses(String s) {
+        Stack<String> stack = new Stack<>();
+        String temp = "";
+        int n = s.length(), nesting = 0;
+        char c;
+        Queue<String> queue = new LinkedList<>();
+        for (int i = 0;i < n;i++) {
+            c = s.charAt(i);
+            if (c == '(') {
+                stack.push(temp);
+                stack.push(String.valueOf(c));
+                temp = "";
+                nesting++;
+            } else if (c == ')') {
+                queue.add(temp);
+                temp = "";
+                while (!stack.peek().equals("(")) {
+                    queue.add(stack.pop());
+                }
+                stack.pop();
+                while (queue.size() > 0) {
+                    stack.push(queue.remove());
+                }
+                nesting--;
+            } else {
+                if (nesting % 2 == 1) {
+                    temp = c + temp;
+                } else {
+                    temp += c;
+                }
+            }
+        }
+        stack.push(temp);
+        String result = "";
+        while (!stack.empty()) {
+            result = stack.pop() + result;
+        }
+        return result;
+    }
+}
