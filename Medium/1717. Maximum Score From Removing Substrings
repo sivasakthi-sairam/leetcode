@@ -1,0 +1,115 @@
+class Solution {
+
+    Map<String, Integer> dpMap;
+
+//     abbaaab
+//     28263
+
+    public int getScore (String s, int x, int y, int aCount, int bCount) {
+        if (aCount == 0 || bCount == 0) {
+            return 0;
+        }
+        if (dpMap.containsKey(s)) {
+            return dpMap.get(s);
+        }
+        int result1 = 0, result2 = 0;
+        int aFirstIndex = s.indexOf('a');
+        int aLastIndex = s.lastIndexOf('a');
+        int bFirstIndex = s.indexOf('b');
+        int bLastIndex = s.lastIndexOf('b');
+
+        aCount = 0;
+        bCount = 0;
+        int found = 0;
+        int overlap = 0;
+        for (int i = aFirstIndex;i <= bLastIndex;i++) {
+            if (s.charAt(i) == 'a') {
+                aCount++;
+                overlap++;
+            } else {
+                bCount++;
+                if (overlap > 0) {
+                    found++;
+                }
+                overlap--;
+            }
+            overlap = Math.max(overlap, 0);
+        }
+        int excessA = 0;
+        int excessB = 0;
+        if (aLastIndex > bLastIndex) {
+            excessA = aLastIndex - bLastIndex;
+        }
+        if (bFirstIndex < aFirstIndex) {
+            excessB = aFirstIndex - bFirstIndex;
+        }
+        result1 = x * found;
+        aCount -= found;
+        bCount -= found;
+        aCount += excessA;
+        bCount += excessB;
+        result1 += Math.min(aCount, bCount) * y;
+
+        aCount = 0;
+        bCount = 0;
+        found = 0;
+        overlap = 0;
+        for (int i = bFirstIndex;i <= aLastIndex;i++) {
+            if (s.charAt(i) == 'a') {
+                aCount++;
+                if (overlap > 0) {
+                    found++;
+                }
+                overlap--;
+            } else {
+                bCount++;
+                overlap++;
+            }
+            overlap = Math.max(overlap, 0);
+        }
+        excessB = 0;
+        excessA = 0;
+        if (bLastIndex > aLastIndex) {
+            excessB = bLastIndex - aLastIndex;
+        }
+        if (aFirstIndex < bFirstIndex) {
+            excessA = bFirstIndex - aFirstIndex;
+        }
+        result2 = y * found;
+        aCount -= found;
+        bCount -= found;
+        bCount += excessB;
+        aCount += excessA;
+        result2 += Math.min(aCount, bCount) * x;
+
+        dpMap.put(s, Math.max(result1, result2));
+        return Math.max(result1, result2);
+    }
+
+    public int maximumGain(String s, int x, int y) {
+        int i = 0, n = s.length(), result = 0;
+        int aCount, bCount, j = 0;
+        dpMap = new HashMap<>();
+        while (i < n) {
+            if (s.charAt(i) == 'a' || s.charAt(i) == 'b') {
+                j = i;
+                aCount = 0;
+                bCount = 0;
+                while (j < n) {
+                    if (s.charAt(j) == 'a') {
+                        aCount++;
+                    } else if (s.charAt(j) == 'b') {
+                        bCount++;
+                    } else {
+                        break;
+                    }
+                    j++;
+                }
+                result += getScore(s.substring(i, j), x, y, aCount, bCount);
+                i = j-1;
+            }
+            i++;
+        }
+        return result;
+    }
+}
