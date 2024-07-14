@@ -1,0 +1,110 @@
+class Solution {
+
+    public int getElement(String s, int index) {
+        int i = index + 1, n = s.length();
+        int ascii;
+        while (i < n) {
+            ascii = s.charAt(i);
+            if (ascii < 97 || ascii > 122) {
+                break;
+            }
+            i++;
+        }
+        return i;
+    }
+
+    public int getNumber(String s, int index) {
+        int i = index + 1, n = s.length();
+        while (i < n) {
+            if (!Character.isDigit(s.charAt(i))) {
+                break;
+            }
+            i++;
+        }
+        return i;
+    }
+
+    public boolean isNumber(String s) {
+        if (s.length() == 0) {
+            return false;
+        }
+        return Character.isDigit(s.charAt(0));
+    }
+
+    public String countOfAtoms(String formula) {
+        TreeMap<String, Integer> map = new TreeMap<>();
+        Stack<String> stack = new Stack<>();
+        Stack<String> tempStack = new Stack<>();
+        int i = 0, n = formula.length(), num = 0, len;
+        char c;
+        String cur;
+        while (i < n) {
+            c = formula.charAt(i);
+            if (Character.isLetter(c)) {
+                len = getElement(formula, i) - i;
+                stack.push(formula.substring(i, i + len));
+                i += len;
+            } else if (Character.isDigit(c)) {
+                len = getNumber(formula, i) - i;
+                stack.push(formula.substring(i, i + len));
+                i += len;
+            } else if (c == '(') {
+                stack.push(String.valueOf("("));
+                i++;
+            } else if (c == ')') {
+                if (i + 1 == n || !Character.isDigit(formula.charAt(i + 1))) {
+                    while (!stack.peek().equals("(")) {
+                        tempStack.push(stack.pop());
+                    }
+                    stack.pop();
+                    while (!tempStack.empty()) {
+                        stack.push(tempStack.pop());
+                    }
+                    i++;
+                } else {
+                    i++;
+                    len = getNumber(formula, i) - i;
+                    num = Integer.parseInt(formula.substring(i, i + len));
+                    i += len;
+                    while (!stack.peek().equals("(")) {
+                        cur = stack.pop();
+                        if (isNumber(cur)) {
+                            tempStack.push(String.valueOf(Integer.parseInt(cur) * num));
+                        } else {
+                            if (tempStack.empty() || !isNumber(tempStack.peek())) {
+                                tempStack.push(String.valueOf(num));
+                                tempStack.push(cur);
+                            } else {
+                                tempStack.push(cur);
+                            }
+                        }
+                    }
+                    stack.pop();
+                    while (!tempStack.empty()) {
+                        stack.push(tempStack.pop());
+                    }
+                }
+            }
+        }
+        String prev = "";
+        while (!stack.empty()) {
+            cur = stack.pop();
+            if (isNumber(cur)) {
+                prev = cur;
+            } else {
+                num = isNumber(prev) ? Integer.parseInt(prev) : 1;
+                map.put(cur, map.getOrDefault(cur, 0) + num);
+                prev = cur;
+            }
+        }
+
+        String result = "";
+        for (String s : map.keySet()) {
+            result += s;
+            if (map.get(s) > 1) {
+                result += map.get(s);
+            }
+        }
+        return result;
+    }
+}
