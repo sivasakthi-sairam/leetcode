@@ -1,0 +1,100 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+
+    public TreeNode findLowestCommonAncestor(TreeNode node, int p, int q) {
+        if (node.val == p || node.val == q) {
+            return node;
+        }
+        if (node.left == null && node.right == null) {
+            return null;
+        }
+        TreeNode left = null, right = null;
+        if (node.left != null) {
+            left = findLowestCommonAncestor(node.left, p, q);
+        }
+        if (node.right != null) {
+            right = findLowestCommonAncestor(node.right, p, q);
+        }
+        if (left != null && right != null) {
+            return node;
+        }
+        return (left == null) ? right : left;
+    }
+
+    public int getSourceDepth(TreeNode node, int source) {
+        int depth = 0;
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(node);
+        int size;
+        TreeNode cur;
+        while (queue.size() > 0) {
+            size = queue.size();
+            for (int i = 0;i < size;i++) {
+                cur = queue.remove();
+                if (cur.val == source) {
+                    return depth;
+                }
+                if (cur.left != null) {
+                    queue.add(cur.left);
+                }
+                if (cur.right != null) {
+                    queue.add(cur.right);
+                }
+            }
+            depth++;
+        }
+        return depth;
+    }
+
+    public String getDestPath(TreeNode node, int dest) {
+        Queue<Pair<TreeNode, String>> queue = new LinkedList<>();
+        queue.add(new Pair<>(node, ""));
+        Pair<TreeNode, String> cur;
+        int size;
+        while (queue.size() > 0) {
+            size = queue.size();
+            for (int i = 0;i < size;i++) {
+                cur = queue.remove();
+                if (cur.getKey().val == dest) {
+                    return cur.getValue();
+                }
+                if (cur.getKey().left != null) {
+                    queue.add(new Pair<>(cur.getKey().left, cur.getValue() + "L"));
+                }
+                if (cur.getKey().right != null) {
+                    queue.add(new Pair<>(cur.getKey().right, cur.getValue() + "R"));
+                }
+            }
+        }
+        return null;
+    }
+
+    public String getDirections(TreeNode root, int startValue, int destValue) {
+        TreeNode lowestAncestor = findLowestCommonAncestor(root, startValue, destValue);
+        if (lowestAncestor.val != startValue && lowestAncestor.val != destValue) {
+            int count = getSourceDepth(lowestAncestor, startValue);
+            String result = "U".repeat(count);
+            result += getDestPath(lowestAncestor, destValue);
+            return result;
+        } else if (lowestAncestor.val == startValue) {
+            return getDestPath(lowestAncestor, destValue);
+        } else {
+            int count = getSourceDepth(lowestAncestor, startValue);
+            return "U".repeat(count);
+        }
+    }
+}
