@@ -1,0 +1,83 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+
+    public int binarySearch(int n, int[] arr) {
+        int l = 0, h = arr.length - 1;
+        int mid;
+        while (l <= h) {
+            mid = (l + h) / 2;
+            if (arr[mid] == n) {
+                return mid;
+            }
+            if (arr[mid] < n) {
+                l = mid + 1;
+            } else {
+                h = mid - 1;
+            }
+        }
+        return l;
+    }
+
+    public void deleteNodes(TreeNode node, int[] toDelete) {
+        if (node == null) {
+            return;
+        }
+        int index = binarySearch(node.val, toDelete);
+        if (index < toDelete.length && index >= 0 && toDelete[index] == node.val) {
+            node.val = 0;
+        }
+        deleteNodes(node.left, toDelete);
+        deleteNodes(node.right, toDelete);
+    }
+
+    public void postOrderFind(TreeNode node, List<TreeNode> result) {
+        if (node == null) {
+            return;
+        }
+        postOrderFind(node.left, result);
+        postOrderFind(node.right, result);
+        if (node.val == 0) {
+            if (node.left != null && node.left.val != 0) {
+                result.add(node.left);
+            }
+            if (node.right != null && node.right.val != 0) {
+                result.add(node.right);
+            }
+        } else {
+            if (node.left != null && node.left.val == 0) {
+                node.left = null;
+            }
+            if (node.right != null && node.right.val == 0) {
+                node.right = null;
+            }
+        }
+    }
+
+    public List<TreeNode> delNodes(TreeNode root, int[] to_delete) {
+        List<TreeNode> result = new ArrayList<>();
+        if (to_delete.length == 0 || root == null) {
+            return result;
+        }
+        Arrays.sort(to_delete);
+        deleteNodes(root, to_delete);
+        postOrderFind(root, result);
+        if (root.val != 0) {
+            result.add(root);
+        }
+        return result;
+    }
+}
