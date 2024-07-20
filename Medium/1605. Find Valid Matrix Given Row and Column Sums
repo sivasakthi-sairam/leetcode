@@ -1,0 +1,17 @@
+class Solution {
+    public int[][] restoreMatrix(int[] rowSum, int[] colSum) {
+        int m = rowSum.length, n = colSum.length;
+        int[][] result = new int[m][n];
+        int tempRowSum, tempColSum, cur;
+        for (int i = 0;i < m;i++) {
+            tempRowSum = rowSum[i];
+            for (int j = 0;j < n;j++) {
+                cur = Math.min(tempRowSum, colSum[j]);
+                result[i][j] = cur;
+                tempRowSum -= cur;
+                colSum[j] -= cur;
+            }
+        }
+        return result;
+    }
+}
