@@ -1,0 +1,38 @@
+class Solution {
+
+    class Node implements Comparable<Node> {
+        int num, freq;
+        public Node (int n, int f) {
+            num = n;
+            freq = f;
+        }
+
+        public int compareTo(Node other) {
+            if (this.freq == other.freq) {
+                return other.num - this.num;
+            }
+            return this.freq - other.freq;
+        }
+    }
+
+    public int[] frequencySort(int[] nums) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i : nums) {
+            map.put(i, map.getOrDefault(i, 0) + 1);
+        }
+        PriorityQueue<Node> heap = new PriorityQueue<>();
+        for (int i : map.keySet()) {
+            heap.add(new Node(i, map.get(i)));
+        }
+        Node cur;
+        int i = 0, n = nums.length;
+        while (i < n) {
+            cur = heap.remove();
+            for (int j = 0;j < cur.freq;j++) {
+                nums[i] = cur.num;
+                i++;
+            }
+        }
+        return nums;
+    }
+}
