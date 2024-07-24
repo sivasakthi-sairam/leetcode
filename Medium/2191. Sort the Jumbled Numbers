@@ -1,0 +1,25 @@
+class Solution {
+    public int[] sortJumbled(int[] mapping, int[] nums) {
+        int n = nums.length;
+        int[][] arr = new int[n][2];
+        int val, j;
+        String s;
+        for (int i = 0;i < n;i++) {
+            arr[i][0] = nums[i];
+            val = 0;
+            s = String.valueOf(nums[i]);
+            for (j = 0;j < s.length();j++) {
+                val *= 10;
+                val += mapping[s.charAt(j) - '0'];
+            }
+            arr[i][1] = val;
+        }
+        Arrays.sort(arr, (a, b) -> {
+            return a[1] - b[1];
+        });
+        for (int i = 0;i < n;i++) {
+            nums[i] = arr[i][0];
+        }
+        return nums;
+    }
+}
