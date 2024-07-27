@@ -1,0 +1,37 @@
+class Solution {
+    public long minimumCost(String source, String target, char[] original, char[] changed, int[] cost) {
+        long[][] dp = new long[26][26];
+        for (long[] arr : dp) {
+            Arrays.fill(arr, Long.MAX_VALUE);
+        }
+        for (int i = 0;i < 26;i++) {
+            dp[i][i] = 0;
+        }
+        int src, dest;
+        for (int i = 0;i < original.length;i++) {
+            src = original[i] - 'a';
+            dest = changed[i] - 'a';
+            dp[src][dest] = Math.min((long) cost[i], dp[src][dest]);
+        }
+        for (int k = 0;k < 26;k++) {
+            for (int i = 0;i < 26;i++) {
+                for (int j = 0;j < 26;j++) {
+                    if (dp[i][k] != Long.MAX_VALUE && dp[k][j] != Long.MAX_VALUE && (dp[i][j] > dp[i][k] + dp[k][j])) {
+                        dp[i][j] = dp[i][k] + dp[k][j];
+                    }
+                }
+            }
+        }
+        long ans = 0;
+        int n = source.length();
+        for (int i = 0;i < n;i++) {
+            src = source.charAt(i) - 'a';
+            dest = target.charAt(i) - 'a';
+            if (dp[src][dest] == Long.MAX_VALUE) {
+                return -1;
+            }
+            ans += dp[src][dest];
+        }
+        return ans;
+    }
+}
