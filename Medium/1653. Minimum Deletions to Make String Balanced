@@ -1,0 +1,22 @@
+class Solution {
+    public int minimumDeletions(String s) {
+        int n = s.length();
+        int[][] freq = new int[n][2];
+        int aCount = 0, bCount = 0;
+        for (int i = 0;i < n;i++) {
+            if (s.charAt(i) == 'a') {
+                aCount++;
+            }
+            if (s.charAt(n - i - 1) == 'b') {
+                bCount++;
+            }
+            freq[i][0] = aCount;
+            freq[n-i-1][1] = bCount;
+        }
+        int max = 0;
+        for (int i = 0;i < n;i++) {
+            max = Math.max(max, freq[i][0] + freq[i][1]);
+        }
+        return n - max;
+    }
+}
