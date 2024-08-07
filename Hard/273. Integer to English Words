@@ -1,0 +1,93 @@
+class Solution {
+
+    Map<Integer, String> onesPlace;
+    Map<Integer, String> elevenToTwenty;
+    Map<Integer, String> tensPlace;
+
+    public String getSubStr(String s) {
+        String res = new String();
+        int n;
+        for (int i = 0;i < s.length();i++) {
+            if (i == 0) {
+                if (onesPlace.containsKey(s.charAt(i) - '0')) {
+                    res = onesPlace.get(s.charAt(i) - '0');
+                }
+            } else if (i == 1) {
+                n = ((s.charAt(i) - '0') * 10) + s.charAt(i-1) - '0';
+                if (elevenToTwenty.containsKey(n)) {
+                    res = elevenToTwenty.get(n);
+                } else if (tensPlace.containsKey(s.charAt(i) - '0')) {
+                    res = tensPlace.get(s.charAt(i) - '0') + " " + res;
+                }
+            } else {
+                if (onesPlace.containsKey(s.charAt(i) - '0')) {
+                    res = onesPlace.get(s.charAt(i) - '0') + " Hundred " + res;
+                }
+            }
+        }
+        return res.trim();
+    }
+
+    public String numberToWords(int num) {
+
+        if (num == 0) {
+            return "Zero";
+        }
+
+        onesPlace = new HashMap<>();
+        onesPlace.put(1, "One");
+        onesPlace.put(2, "Two");
+        onesPlace.put(3, "Three");
+        onesPlace.put(4, "Four");
+        onesPlace.put(5, "Five");
+        onesPlace.put(6, "Six");
+        onesPlace.put(7, "Seven");
+        onesPlace.put(8, "Eight");
+        onesPlace.put(9, "Nine");
+
+        elevenToTwenty = new HashMap<>();
+        elevenToTwenty.put(10, "Ten");
+        elevenToTwenty.put(11, "Eleven");
+        elevenToTwenty.put(12, "Twelve");
+        elevenToTwenty.put(13, "Thirteen");
+        elevenToTwenty.put(14, "Fourteen");
+        elevenToTwenty.put(15, "Fifteen");
+        elevenToTwenty.put(16, "Sixteen");
+        elevenToTwenty.put(17, "Seventeen");
+        elevenToTwenty.put(18, "Eighteen");
+        elevenToTwenty.put(19, "Nineteen");
+
+        tensPlace = new HashMap<>();
+        tensPlace.put(2, "Twenty");
+        tensPlace.put(3, "Thirty");
+        tensPlace.put(4, "Forty");
+        tensPlace.put(5, "Fifty");
+        tensPlace.put(6, "Sixty");
+        tensPlace.put(7, "Seventy");
+        tensPlace.put(8, "Eighty");
+        tensPlace.put(9, "Ninety");
+
+        int pos = 0;
+        String s = new StringBuilder(num + "").reverse().toString();
+        int n = s.length();
+        int idx = 0;
+        String res = new String();
+        String cur, tempRes;
+        while (idx < n) {
+            cur = s.substring(idx, Math.min(idx + 3, n));
+            tempRes = getSubStr(cur);
+            if (pos == 0) {
+                res = tempRes;
+            } else if (pos == 1 && !tempRes.equals("")) {
+                res = tempRes + " Thousand " + res;
+            } else if (pos == 2 && !tempRes.equals("")) {
+                res = tempRes + " Million " + res;
+            } else if (pos == 3 && !tempRes.equals("")) {
+                res = tempRes + " Billion " + res;
+            }
+            pos++;
+            idx += 3;
+        }
+        return res.trim();
+    }
+}
