@@ -1,0 +1,39 @@
+class Solution {
+    public int[][] spiralMatrixIII(int rows, int cols, int rStart, int cStart) {
+        int n = rows * cols;
+        int[][] res = new int[n][2];
+        res[0][0] = rStart;
+        res[0][1] = cStart;
+        int idx = 1;
+        int startR = rStart - 1, startC = cStart - 1, endR = rStart + 1, endC = cStart + 1;
+        boolean[][] visited = new boolean[rows][cols];
+        int i;
+        while (idx < n) {
+            for (i = Math.max(startR + 1, 0);i <= Math.min(endR, rows - 1) && idx < n && endC < cols;i++) {
+                res[idx][0] = i;
+                res[idx][1] = endC;
+                idx++;
+            }
+            for (i = Math.min(endC - 1, cols - 1);i >= Math.max(0, startC) && idx < n && endR < rows;i--) {
+                res[idx][0] = endR;
+                res[idx][1] = i;
+                idx++;
+            }
+            for (i = Math.min(endR-1, rows - 1);i >= Math.max(startR, 0) && idx < n && startC >= 0;i--) {
+                res[idx][0] = i;
+                res[idx][1] = startC;
+                idx++;
+            }
+            for (i = Math.max(0, startC + 1);i <= Math.min(cols - 1, endC) && idx < n && startR >= 0;i++) {
+                res[idx][0] = startR;
+                res[idx][1] = i;
+                idx++;
+            }
+            startR--;
+            startC--;
+            endR++;
+            endC++;
+        }
+        return res;
+    }
+}
