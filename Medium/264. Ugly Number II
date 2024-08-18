@@ -1,0 +1,17 @@
+class Solution {
+    public int nthUglyNumber(int n) {
+        PriorityQueue<Long> minHeap = new PriorityQueue<>();
+        minHeap.add(1l);
+        long cur = 1;
+        for (int i = 0;i < n;i++) {
+            cur = minHeap.remove();
+            while (minHeap.size() > 0 && minHeap.peek() == cur) {
+                minHeap.remove();
+            }
+            minHeap.add(cur * 2);
+            minHeap.add(cur * 3);
+            minHeap.add(cur * 5);
+        }
+        return (int) cur;
+    }
+}
