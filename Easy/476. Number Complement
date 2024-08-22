@@ -1,0 +1,19 @@
+class Solution {
+    public int findComplement(int num) {
+        int bit;
+        int ans = 0;
+        int bitsCount = 0;
+        int temp = num;
+        while (temp > 0) {
+            bitsCount++;
+            temp >>= 1;
+        }
+        for (int i = 0;i < bitsCount;i++) {
+            bit = ((num >> i) & 1);
+            if (bit == 0) {
+                ans |= (1 << i);
+            }
+        }
+        return ans;
+    }
+}
