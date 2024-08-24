@@ -1,0 +1,28 @@
+class Solution {
+
+    Map<String, Integer> dpMap;
+
+    public int dpMemorisation(int sum, int ones, int twos, int n) {
+        String key = ones + "*" + twos;
+        if (dpMap.containsKey(key)) {
+            return dpMap.get(key);
+        }
+        if (sum == n) {
+            return 1;
+        }
+        int result = 0;
+        if (ones > 0 && sum + 1 <= n) {
+            result += dpMemorisation(sum + 1, ones - 1, twos, n);
+        }
+        if (twos > 0 && sum + 2 <= n) {
+            result += dpMemorisation(sum + 2, ones, twos - 1, n);
+        }
+        dpMap.put(key, result);
+        return result;
+    }
+
+    public int climbStairs(int n) {
+        dpMap = new HashMap<>();
+        return dpMemorisation(0, n, n/2, n);
+    }
+}
