@@ -1,0 +1,43 @@
+class Solution {
+
+    public boolean isSafe(int m, int n, int r, int c) {
+        return ((m >= 0) && (m < r) && (n >= 0) && (n < c));
+    }
+
+    int[] dir = new int[]{-1, 0, 1, 0, -1};
+
+    boolean isSubIsland;
+
+    public void bfsVisit(int r, int c, int[][] grid, boolean[][] visited, int[][] map) {
+        visited[r][c] = true;
+        if (map[r][c] == 0) {
+            isSubIsland = false;
+        }
+        int a, b;
+        for (int i = 0;i < 4;i++) {
+            a = r + dir[i];
+            b = c + dir[i + 1];
+            if (isSafe(a, b, grid.length, grid[0].length) && grid[a][b] == 1 && !visited[a][b]) {
+                bfsVisit(a, b, grid, visited, map);
+            }
+        }
+    }
+
+    public int countSubIslands(int[][] grid1, int[][] grid2) {
+        int m = grid1.length, n = grid1[0].length;
+        boolean[][] visited = new boolean[m][n];
+        int ans = 0;
+        for (int i = 0;i < m;i++) {
+            for (int j = 0;j < n;j++) {
+                if (grid2[i][j] == 1 && visited[i][j] == false) {
+                    isSubIsland = true;
+                    bfsVisit(i, j, grid2, visited, grid1);
+                    if (isSubIsland) {
+                        ans++;
+                    }
+                }
+            }
+        }
+        return ans;
+    }
+}
