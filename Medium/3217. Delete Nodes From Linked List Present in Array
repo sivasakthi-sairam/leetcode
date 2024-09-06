@@ -1,0 +1,58 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+
+    public boolean contains(int req, int[] nums) {
+        int l = 0, h = nums.length - 1;
+        int mid = 0;
+        while (l <= h) {
+            mid = (l + h) / 2;
+            if (nums[mid] == req) {
+                return true;
+            }
+            if (nums[mid] < req) {
+                l = mid + 1;
+            } else {
+                h = mid - 1;
+            }
+        }
+        return (nums[mid] == req);
+    }
+
+    public ListNode modifiedList(int[] nums, ListNode head) {
+        Arrays.sort(nums);
+        int min = nums[0];
+        int max = nums[nums.length - 1];
+        boolean isHead = true;
+        ListNode cur = head, prev = null;
+        while (cur != null && cur.val >= min && cur.val <= max && contains(cur.val, nums)) {
+            prev = cur;
+            cur = cur.next;
+        }
+        ListNode result = cur;
+        if (prev != null) {
+            prev.next = null;
+        }
+        if (result == null) {
+            return result;
+        }
+        prev = cur;
+        while (cur != null) {
+            if (cur.val >= min && cur.val <= max && contains(cur.val, nums)) {
+                prev.next = cur.next;
+            } else {
+                prev = cur;
+            }
+            cur = cur.next;
+        }
+        return result;
+    }
+}
