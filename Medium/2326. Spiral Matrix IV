@@ -1,0 +1,74 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public int[][] spiralMatrix(int m, int n, ListNode head) {
+        List<Integer> list = new ArrayList<>();
+        while (head != null) {
+            list.add(head.val);
+            head = head.next;
+        }
+        int startRow = 0, endRow = m-1, startCol = 0, endCol = n-1;
+        int[][] result = new int[m][n];
+        int count = 0, idx = 0, i;
+        while (count < (m * n)) {
+            for (i = startCol;i <= endCol;i++) {
+                if (idx == list.size()) {
+                    result[startRow][i] = -1;
+                } else {
+                    result[startRow][i] = list.get(idx);
+                    idx++;
+                }
+                count++;
+            }
+            if (count == (m * n)) {
+                break;
+            }
+            for (i = startRow + 1;i <= endRow;i++) {
+                if (idx == list.size()) {
+                    result[i][endCol] = -1;
+                } else {
+                    result[i][endCol] = list.get(idx);
+                    idx++;
+                }
+                count++;
+            }
+            if (count == (m * n)) {
+                break;
+            }
+            for (i = endCol - 1;i >= startCol;i--) {
+                if (idx == list.size()) {
+                    result[endRow][i] = -1;
+                } else {
+                    result[endRow][i] = list.get(idx);
+                    idx++;
+                }
+                count++;
+            }
+            if (count == (m * n)) {
+                break;
+            }
+            for (i = endRow - 1;i > startRow;i--) {
+                if (idx == list.size()) {
+                    result[i][startCol] = -1;
+                } else {
+                    result[i][startCol] = list.get(idx);
+                    idx++;
+                }
+                count++;
+            }
+            startRow++;
+            endRow--;
+            startCol++;
+            endCol--;
+        }
+        return result;
+    }
+}
