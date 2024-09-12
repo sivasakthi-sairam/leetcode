@@ -1,0 +1,25 @@
+class Solution {
+    public int countConsistentStrings(String allowed, String[] words) {
+        int[] freq = new int[26];
+        for (int i = 0;i < allowed.length();i++) {
+            freq[allowed.charAt(i) - 'a']++;
+        }
+        char c;
+        boolean eligible;
+        int i, result = 0;
+        for (String s : words) {
+            eligible = true;
+            for (i = 0;i < s.length();i++) {
+                c = s.charAt(i);
+                if (freq[c - 'a'] == 0) {
+                    eligible = false;
+                    break;
+                }
+            }
+            if (eligible) {
+                result++;
+            }
+        }
+        return result;
+    }
+}
