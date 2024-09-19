@@ -1,0 +1,19 @@
+class Solution {
+
+    public List<Integer> pascalsTriangle(int n) {
+        List<Integer> result = new ArrayList<>();
+        long prev = 1;
+        result.add((int) prev);
+        long cur;
+        for (int i = 1;i <= n;i++) {
+            cur = (prev * (n - i + 1)) / i;
+            result.add((int) cur);
+            prev = cur;
+        }
+        return result;
+     }
+
+    public List<Integer> getRow(int rowIndex) {
+        return pascalsTriangle(rowIndex);
+    }
+}
