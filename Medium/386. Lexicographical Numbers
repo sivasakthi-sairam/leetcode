@@ -1,0 +1,22 @@
+class Solution {
+    public List<Integer> lexicalOrder(int n) {
+        List<Integer> result = new ArrayList<>();
+        int num = 1, cur, idx, i, k;
+        while (num <= n) {
+            if (num < 10) {
+                result.add(num);
+                num++;
+            } else {
+                cur = num / 10;
+                idx = result.indexOf(cur);
+                k = 10;
+                for (i = 0;i < k && num <= n;i++) {
+                    idx++;
+                    result.add(idx, num);
+                    num++;
+                }
+            }
+        }
+        return result;
+    }
+}
