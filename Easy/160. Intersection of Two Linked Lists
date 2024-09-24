@@ -1,0 +1,82 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) {
+ *         val = x;
+ *         next = null;
+ *     }
+ * }
+ */
+public class Solution {
+
+    public ListNode reverse(ListNode node) {
+        ListNode prev = null, next = null, cur = node;
+        while (cur != null) {
+            next = cur.next;
+            cur.next = prev;
+            prev = cur;
+            cur = next;
+        }
+        return prev;
+    }
+
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        ListNode aCopy = headA, bCopy = headB;
+
+        ListNode aClone = new ListNode(0);
+        ListNode aCloneCopy = aClone;
+        int aLen = 0;
+        while (aCopy != null) {
+            aCloneCopy.next = new ListNode(aCopy.val);
+            aCopy = aCopy.next;
+            aCloneCopy = aCloneCopy.next;
+            aLen++;
+        }
+
+        ListNode bClone = new ListNode(0);
+        ListNode bCloneCopy = bClone;
+        int bLen = 0;
+        while (bCopy != null) {
+            bCloneCopy.next = new ListNode(bCopy.val);
+            bCopy = bCopy.next;
+            bCloneCopy = bCloneCopy.next;
+            bLen++;
+        }
+
+        ListNode aReverse = reverse(aClone.next);
+        ListNode bReverse = reverse(bClone.next);
+        int skip = 0;
+        while (aReverse != null && bReverse != null && aReverse.val == bReverse.val) {
+            aReverse = aReverse.next;
+            bReverse = bReverse.next;
+            skip++;
+        }
+        if (skip == 0) {
+            return null;
+        }
+
+        int k = aLen - skip;
+        aCopy = headA;
+        for (int i = 0;i < k;i++) {
+            aCopy = aCopy.next;
+        }
+
+        k = bLen - skip;
+        bCopy = headB;
+        for (int i = 0;i < k;i++) {
+            bCopy = bCopy.next;
+        }
+
+        while (aCopy != null && bCopy != null) {
+            if (aCopy == bCopy) {
+                return aCopy;
+            }
+            aCopy = aCopy.next;
+            bCopy = bCopy.next;
+        }
+
+        return null;
+    }
+}
