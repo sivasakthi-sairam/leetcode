@@ -1,0 +1,64 @@
+class MyCalendar {
+
+    List<Integer> list;
+
+    public MyCalendar() {
+        list = new ArrayList<>();
+    }
+
+    public int findIndex(int n, List<Integer> list) {
+        int l = 0, h = list.size() - 1;
+        int m;
+        while (l <= h) {
+            m = (l + h) / 2;
+            if (list.get(m) == n) {
+                return m;
+            }
+            if (list.get(m) < n) {
+                l = m + 1;
+            } else {
+                h = m - 1;
+            }
+        }
+        if (list.get(l) > n) {
+            l--;
+        }
+        return l;
+    }
+
+    public boolean book(int start, int end) {
+        if (list.size() == 0) {
+            list.add(start);
+            list.add(end);
+            return true;
+        }
+        if (end <= list.get(0)) {
+            list.add(0, start);
+            list.add(1, end);
+            return true;
+        }
+        if (start >= list.get(list.size() - 1)) {
+            list.add(start);
+            list.add(end);
+            return true;
+        }
+        int idx = findIndex(start, list);
+        if (idx % 2 == 0) {
+            return false;
+        } else {
+            if (list.get(idx + 1) >= end) {
+                list.add(idx + 1, end);
+                list.add(idx + 1, start);
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+}
+
+/**
+ * Your MyCalendar object will be instantiated and called as such:
+ * MyCalendar obj = new MyCalendar();
+ * boolean param_1 = obj.book(start,end);
+ */
