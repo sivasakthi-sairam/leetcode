@@ -1,0 +1,27 @@
+class Solution {
+    public long dividePlayers(int[] skill) {
+        int n = skill.length;
+        Map<Integer, Integer> map = new HashMap<>();
+        int sum = 0;
+        for (int i : skill) {
+            sum += i;
+            map.put(i, map.getOrDefault(i, 0) + 1);
+        }
+        long ans = 0;
+        int req = (sum / (n / 2));
+        int k;
+        for (int i : skill) {
+            if (map.get(i) == 0) {
+                continue;
+            }
+            k = req - i;
+            if (!map.containsKey(k) || map.get(k) == 0) {
+                return -1;
+            }
+            ans += i * k;
+            map.put(i, map.get(i) - 1);
+            map.put(k, map.get(k) - 1);
+        }
+        return ans;
+    }
+}
