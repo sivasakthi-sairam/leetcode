@@ -1,0 +1,23 @@
+class Solution {
+    public int minLength(String s) {
+        boolean changed = false;
+        int idx;
+        while (true) {
+            changed = false;
+            if (s.contains("AB")) {
+                idx = s.indexOf("AB");
+                s = s.substring(0, idx) + s.substring(idx + 2);
+                changed = true;
+            }
+            if (s.contains("CD")) {
+                idx = s.indexOf("CD");
+                s = s.substring(0, idx) + s.substring(idx + 2);
+                changed = true;
+            }
+            if (!changed) {
+                break;
+            }
+        }
+        return s.length();
+    }
+}
