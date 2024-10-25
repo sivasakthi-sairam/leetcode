@@ -1,0 +1,22 @@
+class Solution {
+    public List<String> removeSubfolders(String[] folder) {
+        Arrays.sort(folder);
+        int idx = 0, n = folder.length, j;
+        String temp;
+        List<String> result = new ArrayList<>();
+        while (idx < n) {
+            j = idx + 1;
+            while (j < n && folder[j].startsWith(folder[idx])) {
+                temp = folder[j].substring(folder[idx].length());
+                if (temp.length() == 0 || temp.charAt(0) == '/') {
+                    j++;
+                } else {
+                    break;
+                }
+            }
+            result.add(folder[idx]);
+            idx = j;
+        }
+        return result;
+    }
+}
