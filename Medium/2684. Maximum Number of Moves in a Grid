@@ -1,0 +1,34 @@
+class Solution {
+
+    Integer[][] dp;
+    int R, C;
+
+    public int maxPossibleSteps(int r, int c, int[][] grid) {
+        if (dp[r][c] != null) {
+            return dp[r][c];
+        }
+        int result = 0;
+        if (r-1 >= 0 && c+1 < C && grid[r-1][c+1] > grid[r][c]) {
+            result = Math.max(result, 1 + maxPossibleSteps(r-1, c+1, grid));
+        }
+        if (c+1 < C && grid[r][c+1] > grid[r][c]) {
+            result = Math.max(result, 1 + maxPossibleSteps(r, c+1, grid));
+        }
+        if (r+1 < R && c+1 < C && grid[r+1][c+1] > grid[r][c]) {
+            result = Math.max(result, 1 + maxPossibleSteps(r+1, c+1, grid));
+        }
+        dp[r][c] = result;
+        return result;
+    }
+
+    public int maxMoves(int[][] grid) {
+        int result = 0;
+        R = grid.length;
+        C = grid[0].length;
+        dp = new Integer[R][C];
+        for (int i = 0;i < R;i++) {
+            result = Math.max(result, maxPossibleSteps(i, 0, grid));
+        }
+        return result;
+    }
+}
