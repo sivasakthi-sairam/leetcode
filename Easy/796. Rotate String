@@ -1,0 +1,19 @@
+class Solution {
+
+    public boolean isRotateString(String s, String goal, int idx) {
+        String rotateStr = s.substring(idx) + s.substring(0, idx);
+        return rotateStr.equals(goal);
+    }
+
+    public boolean rotateString(String s, String goal) {
+        int n = s.length();
+        for (int i = 0;i < n;i++) {
+            if (s.charAt(i) == goal.charAt(0)) {
+                if (isRotateString(s, goal, i)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+}
