@@ -1,0 +1,28 @@
+class Solution {
+    public String compressedString(String word) {
+        StringBuilder sb = new StringBuilder();
+        char cur;
+        int n = word.length(), curCount;
+        int i = 0, j, quotient;
+        while (i < n) {
+            cur = word.charAt(i);
+            curCount = 1;
+            j = i + 1;
+            while (j < n && word.charAt(j) == cur) {
+                curCount++;
+                j++;
+            }
+            quotient = curCount / 9;
+            if (quotient > 0) {
+                sb.append((9 + String.valueOf(cur)).repeat(quotient));
+            }
+            curCount %= 9;
+            if (curCount > 0) {
+                sb.append(curCount);
+                sb.append(cur);
+            }
+            i = j;
+        }
+        return sb.toString();
+    }
+}
