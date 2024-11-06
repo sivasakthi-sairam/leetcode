@@ -1,0 +1,47 @@
+class Solution {
+
+    Map<Integer, Integer> bitsMap;
+
+    public int getNumOfBits(int n) {
+        int count = 0;
+        while (n > 0) {
+            count += (n & 1);
+            n >>= 1;
+        }
+        return count;
+    }
+
+    public boolean isSwapAllowed(int a, int b) {
+        if (!bitsMap.containsKey(a)) {
+            bitsMap.put(a, getNumOfBits(a));
+        }
+        if (!bitsMap.containsKey(b)) {
+            bitsMap.put(b, getNumOfBits(b));
+        }
+        return (bitsMap.get(a) == bitsMap.get(b));
+    }
+
+    public void swap(int[] nums, int a, int b) {
+        int temp = nums[a];
+        nums[a] = nums[b];
+        nums[b] = temp;
+    }
+
+    public boolean canSortArray(int[] nums) {
+        int n = nums.length, i, j;
+        bitsMap = new HashMap<>();
+        for (i = 1;i < n;i++) {
+            j = i;
+            while (j > 0 && nums[j] < nums[j-1] && isSwapAllowed(nums[j], nums[j-1])) {
+                swap(nums, j, j-1);
+                j--;
+            }
+        }
+        for (i = 1;i < n;i++) {
+            if (nums[i] < nums[i-1]) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
