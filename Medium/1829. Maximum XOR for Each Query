@@ -1,0 +1,25 @@
+class Solution {
+    public int[] getMaximumXor(int[] nums, int maximumBit) {
+        int n = nums.length, i;
+        int totalXor = nums[0];
+        for (i = 1;i < n;i++) {
+            totalXor ^= nums[i];
+        }
+        int cur, j;
+        int max = (int) Math.pow(2, maximumBit);
+        int[] result = new int[n];
+        for (i = n-1;i >= 0;i--) {
+            cur = 0;
+            for (j = 20;j >= 0;j--) {
+                if (((totalXor >> j) & 1) == 0) {
+                    if ((cur | (1 << j)) < max) {
+                        cur |= (1 << j);
+                    }
+                }
+            }
+            result[n - i - 1] = cur;
+            totalXor ^= nums[i];
+        }
+        return result;
+    }
+}
