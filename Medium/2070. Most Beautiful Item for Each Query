@@ -1,0 +1,65 @@
+class Solution {
+
+    public int getLeastIndex(int[][] items, int n, int req) {
+        int l = 0, h = n - 1;
+        int m;
+        while (l <= h) {
+            m = (l + h) / 2;
+            if (items[m][0] == req) {
+                return m;
+            }
+            if (items[m][0] < req) {
+                l = m + 1;
+            } else {
+                h = m - 1;
+            }
+        }
+        while (items[l][0] > req) {
+            l--;
+        }
+        return l;
+    }
+
+    public int[] maximumBeauty(int[][] items, int[] queries) {
+        Arrays.sort(items, (a, b) -> {
+            return a[0] - b[0];
+        });
+        int n = items.length;
+        int qLen = queries.length;
+        int[] result = new int[qLen];
+        Map<Integer, Integer> map = new HashMap<>();
+        int max, idx, tempIdx;
+        for (int i = 0;i < qLen;i++) {
+            if (queries[i] > items[n-1][0]) {
+                queries[i] = items[n-1][0];
+            }
+            if (queries[i] < items[0][0]) {
+                result[i] = 0;
+            } else if (map.containsKey(queries[i])) {
+                result[i] = map.get(queries[i]);
+            } else {
+                idx = getLeastIndex(items, n, queries[i]);
+                tempIdx = idx;
+                max = 0;
+                while (idx >= 0) {
+                    if (map.containsKey(items[idx][0])) {
+                        max = Math.max(max, map.get(items[idx][0]));
+                        break;
+                    } else {
+                        max = Math.max(max, items[idx][1]);
+                    }
+                    idx--;
+                }
+                idx = tempIdx;
+                while (idx < n && items[idx][0] == items[tempIdx][0]) {
+                    max = Math.max(max, items[idx][1]);
+                    idx++;
+                }
+                map.put(queries[i], max);
+                map.put(items[tempIdx][0], max);
+                result[i] = max;
+            }
+        }
+        return result;
+    }
+}
