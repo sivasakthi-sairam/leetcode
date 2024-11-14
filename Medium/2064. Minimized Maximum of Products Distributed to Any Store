@@ -1,0 +1,39 @@
+class Solution {
+
+    public boolean isOptimalDivision(long n, int shops, int[] products) {
+        int count = 0;
+        long quotient;
+        for (int i : products) {
+            quotient = i / n;
+            count += quotient;
+            if (quotient * n != i) {
+                count++;
+            }
+            if (count > shops) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public int minimizedMaximum(int n, int[] quantities) {
+        long totalProducts = 0;
+        for (int i : quantities) {
+            totalProducts += i;
+        }
+        if (totalProducts <= n) {
+            return 1;
+        }
+        long l = 1, h = totalProducts;
+        long m;
+        while (l <= h) {
+            m = (l + h) / 2;
+            if (isOptimalDivision(m, n, quantities)) {
+                h = m - 1;
+            } else {
+                l = m + 1;
+            }
+        }
+        return (int) l;
+    }
+}
