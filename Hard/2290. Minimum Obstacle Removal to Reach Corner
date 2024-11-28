@@ -1,0 +1,49 @@
+class Solution {
+
+    class Node implements Comparable<Node> {
+        int r, c, wt;
+        public Node (int R, int C, int W) {
+            r = R;
+            c = C;
+            wt = W;
+        }
+
+        public int compareTo(Node other) {
+            return this.wt - other.wt;
+        }
+    }
+
+    public boolean isSafe(int r, int c, int R, int C) {
+        return ((r >= 0) && (r < R) && (c >= 0) && (c < C));
+    }
+
+    public int minimumObstacles(int[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+        PriorityQueue<Node> minHeap = new PriorityQueue<>();
+        minHeap.add(new Node(0, 0, grid[0][0]));
+        boolean[][] visited = new boolean[m][n];
+        Node cur;
+        int[] dir = new int[]{-1, 0, 1, 0, -1};
+        int ans = 0, j, r, c;
+        while (minHeap.size() > 0) {
+            cur = minHeap.remove();
+            if (visited[cur.r][cur.c]) {
+                continue;
+            }
+            visited[cur.r][cur.c] = true;
+            if (cur.r == m - 1 && cur.c == n - 1) {
+                ans = cur.wt;
+                break;
+            }
+            for (j = 0;j < 4;j++) {
+                r = cur.r + dir[j];
+                c = cur.c + dir[j + 1];
+                if (isSafe(r, c, m, n) && !visited[r][c]) {
+                    minHeap.add(new Node(r, c, cur.wt + grid[r][c]));
+                }
+            }
+        }
+        return ans;
+    }
+}
