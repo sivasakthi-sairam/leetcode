@@ -1,0 +1,22 @@
+class Solution {
+    public String addSpaces(String s, int[] spaces) {
+        StringBuilder sb = new StringBuilder();
+        int spaceIdx = 0;
+        int spaceLen = spaces.length;
+        int len = s.length();
+        for (int i = 0;i < len;i++) {
+            if (spaceIdx < spaceLen) {
+                if (i == spaces[spaceIdx]) {
+                    sb.append(" ");
+                    sb.append(s.charAt(i));
+                    spaceIdx++;
+                } else {
+                    sb.append(s.charAt(i));
+                }
+            } else {
+                sb.append(s.charAt(i));
+            }
+        }
+        return sb.toString();
+    }
+}
