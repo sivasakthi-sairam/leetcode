@@ -1,0 +1,43 @@
+class Solution {
+    public boolean[] isArraySpecial(int[] nums, int[][] queries) {
+        int qLen = queries.length;
+        int start, end, i, j, prev, next;
+        boolean[] result = new boolean[qLen];
+        boolean found, ans;
+        Map<String, Boolean> map = new HashMap<>();
+        String key;
+        for (i = 0;i < qLen;i++) {
+            start = queries[i][0];
+            end = queries[i][1];
+            if (start == end) {
+                result[i] = true;
+                continue;
+            }
+            key = start + "*" + end;
+            if (map.containsKey(key)) {
+                result[i] = map.get(key);
+                continue;
+            }
+            found = false;
+            ans = false;
+            for (j = start + 1;j <= end;j += 2) {
+                if ((nums[j-1] & 1) == (nums[j] & 1)) {
+                    ans = false;
+                    found = true;
+                    break;
+                }
+                if ((j + 1 <= end) && ((nums[j] & 1) == (nums[j+1] & 1))) {
+                    ans = false;
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                ans = true;
+            }
+            result[i] = ans;
+            map.put(key, ans);
+        }
+        return result;
+    }
+}
