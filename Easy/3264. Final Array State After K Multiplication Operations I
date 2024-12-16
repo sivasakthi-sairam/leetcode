@@ -1,0 +1,33 @@
+class Solution {
+
+    class Node implements Comparable<Node> {
+        int val, idx;
+        public Node (int a, int b) {
+            val = a;
+            idx = b;
+        }
+
+        public int compareTo(Node other) {
+            if (this.val == other.val) {
+                return this.idx - other.idx;
+            }
+            return this.val - other.val;
+        }
+    }
+
+    public int[] getFinalState(int[] nums, int k, int multiplier) {
+        PriorityQueue<Node> minHeap = new PriorityQueue<>();
+        int n = nums.length;
+        for (int i = 0;i < n;i++) {
+            minHeap.add(new Node(nums[i], i));
+        }
+        Node cur;
+        for (int i = 0;i < k;i++) {
+            cur = minHeap.remove();
+            cur.val *= multiplier;
+            nums[cur.idx] = cur.val;
+            minHeap.add(cur);
+        }
+        return nums;
+    }
+}
