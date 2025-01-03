@@ -1,0 +1,23 @@
+class Solution {
+    public int waysToSplitArray(int[] nums) {
+        int i, n = nums.length;
+        long sum = 0;
+        for (i = 0;i < (n/2);i++) {
+            sum += nums[i];
+            sum += nums[n - i - 1];
+        }
+        if ((n%2) == 1) {
+            sum += nums[n/2];
+        }
+        long prefixSum = 0, sumB;
+        int result = 0;
+        for (i = 0;i < n - 1;i++) {
+            prefixSum += nums[i];
+            sumB = sum - prefixSum;
+            if (prefixSum >= sumB) {
+                result++;
+            }
+        }
+        return result;
+    }
+}
