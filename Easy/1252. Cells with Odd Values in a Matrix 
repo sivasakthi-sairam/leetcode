@@ -1,0 +1,27 @@
+class Solution {
+    public int oddCells(int m, int n, int[][] indices) {
+        int[] row = new int[m];
+        int[] col = new int[n];
+        for (int[] index : indices) {
+            row[index[0]]++;
+            col[index[1]]++;
+        }
+        int oddColCount = 0, evenColCount = 0;
+        for (int j : col) {
+            if ((j & 1) == 1) {
+                oddColCount++;
+            } else {
+                evenColCount++;
+            }
+        }
+        int ans = 0;
+        for (int i : row) {
+            if ((i & 1) == 1) {
+                ans += evenColCount;
+            } else {
+                ans += oddColCount;
+            }
+        }
+        return ans;
+    }
+}
