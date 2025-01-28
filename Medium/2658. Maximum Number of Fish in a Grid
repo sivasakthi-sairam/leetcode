@@ -1,0 +1,38 @@
+class Solution {
+
+    int[] dir = new int[]{-1, 0, 1, 0, -1};
+    int fishCount;
+
+    public boolean isSafe(int r, int c, int R, int C) {
+        return ((r >= 0) && (r < R) && (c >= 0) && (c < C));
+    }
+
+    public void dfs(int r, int c, int R, int C, int[][] grid, boolean[][] visited) {
+        fishCount += grid[r][c];
+        visited[r][c] = true;
+        int curR, curC;
+        for (int i = 0;i < 4;i++) {
+            curR = r + dir[i];
+            curC = c + dir[i + 1];
+            if (isSafe(curR, curC, R, C) && (grid[curR][curC] > 0) && !visited[curR][curC]) {
+                dfs(curR, curC, R, C, grid, visited);
+            }
+        }
+    }
+
+    public int findMaxFish(int[][] grid) {
+        int m = grid.length, n = grid[0].length;
+        boolean[][] visited = new boolean[m][n];
+        int ans = 0, i, j;
+        for (i = 0;i < m;i++) {
+            for (j = 0;j < n;j++) {
+                if (grid[i][j] > 0 && !visited[i][j]) {
+                    fishCount = 0;
+                    dfs(i, j, m, n, grid, visited);
+                    ans = Math.max(ans, fishCount);
+                }
+            }
+        }
+        return ans;
+    }
+}
