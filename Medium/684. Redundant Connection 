@@ -1,0 +1,44 @@
+class Solution {
+
+    public int findParent(int a, int[] parent) {
+        while (a != parent[a]) {
+            parent[a] = parent[parent[a]];
+            a = parent[a];
+        }
+        return a;
+    }
+
+    public boolean union(int a, int b, int[] rank, int[] parent) {
+        int aParent = findParent(a, parent);
+        int bParent = findParent(b, parent);
+        if (aParent == bParent) {
+            return false;
+        }
+        if (rank[aParent] >= rank[bParent]) {
+            parent[bParent] = aParent;
+            rank[aParent] += rank[bParent];
+        } else {
+            parent[aParent] = bParent;
+            rank[bParent] += rank[aParent];
+        }
+        return true;
+    }
+
+    public int[] findRedundantConnection(int[][] edges) {
+        int n = edges.length;
+        int[] parent = new int[n + 1];
+        int[] rank = new int[n + 1];
+        for (int i = 0;i <= n;i++) {
+            parent[i] = i;
+            rank[i] = 1;
+        }
+        int[] ans = new int[2];
+        for (int[] edge : edges) {
+            if (!union(edge[0], edge[1], rank, parent)) {
+                ans[0] = edge[0];
+                ans[1] = edge[1];
+            }
+        }
+        return ans;
+    }
+}
